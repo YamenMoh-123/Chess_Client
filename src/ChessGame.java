@@ -1,6 +1,8 @@
 import javax.swing.*;
 
 public class ChessGame extends JPanel{
+    private static int Game_Width = 800;
+    private static int Game_Height = 800;
 
 
     public ChessGame(){
@@ -15,7 +17,7 @@ public class ChessGame extends JPanel{
         ChessBoard chessBoard = new ChessBoard();
         frame.add(chessBoard);
         //frame.add(new ChessGame());
-        frame.setSize(750, 750);
+        frame.setSize(Game_Width, Game_Height);
         frame.setVisible(true);
 
     }
