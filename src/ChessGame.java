@@ -21,4 +21,5 @@ public class ChessGame extends JPanel{
         frame.setVisible(true);
 
     }
+
 }

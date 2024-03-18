@@ -1,3 +1,5 @@
+import java.awt.*;
+import java.awt.image.*;
 
 public class PieceObject  {
     int value;
@@ -8,5 +10,9 @@ public class PieceObject  {
         this.name = name;
     }
 
+    public void tick() {
+    }
+    public void render(Graphics2D g2d) {
 
+    }
 }
