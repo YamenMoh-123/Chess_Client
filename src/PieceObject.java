@@ -6,11 +6,14 @@ public class PieceObject  {
     int value;
     String name;
     Color color;
+    int x,y;
 
-    public PieceObject(int value, String name, Color color){
+    public PieceObject(int value, String name, Color color, int x, int y){
         this.value = value;
         this.name = name;
         this.color = color;
+        this.x = x;
+        this.y = y;
     }
 
 

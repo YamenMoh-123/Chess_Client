@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class QueenObject extends PieceObject{
     static BufferedImage[] QueenSprite = Resources.pieceSheet.getImagesFrom(2, 2);
-    public QueenObject(int value, String name, Color color) {
-        super(value, name, color);
+    public QueenObject(int value, String name, Color color, int x, int y) {
+        super(value, name, color, x, y);
 
     }
 
@@ -29,9 +29,7 @@ public class QueenObject extends PieceObject{
     }
     @Override
     public void render(Graphics2D g2d) {
-
-        g2d.setColor(Color.RED);
-        g2d.draw( new Rectangle(10, 10, 1000, 1000));
-        g2d.drawImage(QueenSprite[0], 10, 10, 100, 100, null);
+       // System.out.println("rendering queen");
+        g2d.drawImage(QueenSprite[0], this.x, this.y, 100, 100, null);
     }
 }

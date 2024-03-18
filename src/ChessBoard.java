@@ -17,7 +17,7 @@ public class ChessBoard extends JPanel {
 
     private ChessSquare previousClickedTile = null;
     private Color previousTileColor = null;
-    public static GameManager gameManager = new GameManager();
+ //   public static GameManager gameManager = new GameManager();
 
     // action listener for the buttons
      private ActionListener pieceListener = new ActionListener() {
@@ -61,8 +61,11 @@ public class ChessBoard extends JPanel {
                 currButton.setBackground(Color.WHITE);
                 currButton.setBorder(new EmptyBorder(0, 0, 0, 0));
 
-                //currButton.setPiece(new QueenObject(5, "Rook", Color.BLACK));
+                PieceObject piece = new QueenObject(5, "Queen", Color.BLACK, col*100, row*100);
 
+                currButton.setPiece(piece);
+
+                GameCanvas.gameManager.addGameObject(piece);
                 if ((row + col) % 2 == 0) {
                     currButton.setBackground(Color.BLACK);
                 }
@@ -73,9 +76,7 @@ public class ChessBoard extends JPanel {
             }
         }
 
-        QueenObject piece = new QueenObject(5, "Queen", Color.BLACK);
-        System.out.println("made a queen");
-        gameManager.addGameObject(piece);
+
 
     }
 }

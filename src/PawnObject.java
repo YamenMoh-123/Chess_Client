@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class PawnObject extends PieceObject{
     static BufferedImage[] whitePawnImages = new SpriteSheet("Resources/Sprites/Pieces_Sprites.png", 6, 6, 133, 133).getImagesFrom(0, 1);
 
-    public PawnObject(int value, String name, Color color) {
-        super(value, name, color);
+    public PawnObject(int value, String name, Color color, int x, int y) {
+        super(value, name, color, x, y);
     }
 
     @Override

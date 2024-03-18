@@ -2,8 +2,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class KnightObject extends PieceObject{
-    public KnightObject(int value, String name, Color color) {
-        super(value, name, color);
+    public KnightObject(int value, String name, Color color, int x, int y) {
+        super(value, name, color,   x, y);
     }
     // keep mutual
     private static String[] colNames = {"a", "b", "c", "d", "e", "f", "g", "h"};

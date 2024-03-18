@@ -2,8 +2,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class KingObject extends PieceObject{
-    public KingObject(int value, String name, Color color) {
-        super(value, name, color);
+    public KingObject(int value, String name, Color color, int x, int y) {
+        super(value, name, color,   x, y);
     }
 
     @Override

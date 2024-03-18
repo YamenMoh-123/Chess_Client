@@ -5,8 +5,8 @@ public class RookObject extends PieceObject{
     // keep mutual
     private static String[] colNames = {"a", "b", "c", "d", "e", "f", "g", "h"};
 
-    public RookObject(int value, String name, Color color) {
-        super(value, name, color);
+    public RookObject(int value, String name, Color color, int x, int y) {
+        super(value, name, color, x, y);
     }
 
     @Override
