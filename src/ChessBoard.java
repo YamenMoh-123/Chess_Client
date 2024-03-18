@@ -12,7 +12,7 @@ public class ChessBoard extends JPanel {
 
     private JButton[][] chessBoard = new JButton[ROWS][COLS];
 
-    private JButton previousClickedTile = null;
+    private ChessSquare previousClickedTile = null;
     private Color previousTileColor = null;
 
     // action listener for the buttons
@@ -23,19 +23,26 @@ public class ChessBoard extends JPanel {
            // System.out.println(((JButton) e.getSource()).getName());
 
             if(previousClickedTile == null){
-                previousClickedTile = (JButton) e.getSource();
+                previousClickedTile = (ChessSquare) e.getSource();
                 previousTileColor = previousClickedTile.getBackground();
                 previousClickedTile.setBackground(Color.RED);
             }
             else {
                 previousClickedTile.setBackground(previousTileColor);
-                previousClickedTile = (JButton) e.getSource();
+                previousClickedTile = (ChessSquare) e.getSource();
                 previousTileColor = previousClickedTile.getBackground();
                 previousClickedTile.setBackground(Color.RED);
-                System.out.println(previousClickedTile.getName());
+                //System.out.println(previousClickedTile.getName());
             }
 
+            System.out.println(previousClickedTile.getPiece().validMoves(previousClickedTile.getName()));
+            //System.out.println("run");
 
+
+            // call piece.validateMove()
+            // piece calls its own validateMove function, returns a list of possible moves (taking / vs movement for pawn).
+            // this checks if the move is valid. obstructed, can take
+            // for checks. the piece is allowed to move on the backend, isCheck is called and returns true, the move is invalid
         }
     };
 
@@ -46,10 +53,12 @@ public class ChessBoard extends JPanel {
 
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
-                JButton currButton = new JButton();
+                ChessSquare currButton = new ChessSquare();
                 currButton.setName(colNames[col] + " " + (ROWS-row));
                 currButton.setBackground(Color.WHITE);
                 currButton.setBorder(new EmptyBorder(0, 0, 0, 0));
+
+                currButton.setPiece(new QueenObject(5, "Rook", Color.BLACK));
 
                 if ((row + col) % 2 == 0) {
                     currButton.setBackground(Color.BLACK);
@@ -60,9 +69,8 @@ public class ChessBoard extends JPanel {
                 add(chessBoard[row][col]);
             }
         }
+
     }
-
-
 
 
 }
