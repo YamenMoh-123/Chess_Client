@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.image.*;
 import java.util.ArrayList;
 
 public class PieceObject  {
@@ -12,8 +13,13 @@ public class PieceObject  {
         this.color = color;
     }
 
+
+    public void tick() {
+    }
+    public void render(Graphics2D g2d) {
+
     public ArrayList<String> validMoves(String startingPos){
         return new ArrayList<String>();
     }
-
+    }
 }
