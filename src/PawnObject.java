@@ -1,7 +1,9 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class PawnObject extends PieceObject{
+    static BufferedImage[] whitePawnImages = new SpriteSheet("Resources/Sprites/Pieces_Sprites.png", 6, 6, 133, 133).getImagesFrom(0, 1);
 
     public PawnObject(int value, String name, Color color) {
         super(value, name, color);
@@ -29,5 +31,8 @@ public class PawnObject extends PieceObject{
         }
         return validMoves;
     }
-
+    @Override
+    public void render(Graphics2D g2d) {
+        g2d.drawImage(whitePawnImages[0], 10, 10, 100, 100, null);
+    }
 }

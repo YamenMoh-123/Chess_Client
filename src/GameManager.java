@@ -12,10 +12,12 @@ public class GameManager {
 
     public void render(Graphics2D g2d) {
         g2d.translate(0, 0);
+        System.out.println("Rendering" + gameObjects.size());
         gameObjects.forEach(gameObject -> gameObject.render(g2d));
     }
 
     public void addGameObject(PieceObject gameObject) {
+        System.out.println("Adding the Queen");
         gameObjects.add(gameObject);
     }
 

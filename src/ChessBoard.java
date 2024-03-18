@@ -3,8 +3,11 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferStrategy;
 
 public class ChessBoard extends JPanel {
+    private Thread thread;
+    private BufferStrategy bs;
     private static final int ROWS = 8;
     private static final int COLS = 8;
 
@@ -14,6 +17,7 @@ public class ChessBoard extends JPanel {
 
     private ChessSquare previousClickedTile = null;
     private Color previousTileColor = null;
+    public static GameManager gameManager = new GameManager();
 
     // action listener for the buttons
      private ActionListener pieceListener = new ActionListener() {
@@ -50,7 +54,6 @@ public class ChessBoard extends JPanel {
     public ChessBoard() {
         setLayout(new GridLayout(ROWS, COLS));
 
-
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 ChessSquare currButton = new ChessSquare();
@@ -58,7 +61,7 @@ public class ChessBoard extends JPanel {
                 currButton.setBackground(Color.WHITE);
                 currButton.setBorder(new EmptyBorder(0, 0, 0, 0));
 
-                currButton.setPiece(new QueenObject(5, "Rook", Color.BLACK));
+                //currButton.setPiece(new QueenObject(5, "Rook", Color.BLACK));
 
                 if ((row + col) % 2 == 0) {
                     currButton.setBackground(Color.BLACK);
@@ -70,7 +73,9 @@ public class ChessBoard extends JPanel {
             }
         }
 
+        QueenObject piece = new QueenObject(5, "Queen", Color.BLACK);
+        System.out.println("made a queen");
+        gameManager.addGameObject(piece);
+
     }
-
-
 }

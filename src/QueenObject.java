@@ -1,9 +1,12 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class QueenObject extends PieceObject{
+    static BufferedImage[] QueenSprite = Resources.pieceSheet.getImagesFrom(2, 2);
     public QueenObject(int value, String name, Color color) {
         super(value, name, color);
+
     }
 
     @Override
@@ -23,5 +26,12 @@ public class QueenObject extends PieceObject{
             }
         }
         return validMoves;
+    }
+    @Override
+    public void render(Graphics2D g2d) {
+
+        g2d.setColor(Color.RED);
+        g2d.draw( new Rectangle(10, 10, 1000, 1000));
+        g2d.drawImage(QueenSprite[0], 10, 10, 100, 100, null);
     }
 }

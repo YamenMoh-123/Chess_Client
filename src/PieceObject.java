@@ -17,9 +17,8 @@ public class PieceObject  {
     public void tick() {
     }
     public void render(Graphics2D g2d) {
-
+    }
     public ArrayList<String> validMoves(String startingPos){
         return new ArrayList<String>();
-    }
     }
 }
