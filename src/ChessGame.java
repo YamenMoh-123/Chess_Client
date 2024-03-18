@@ -30,7 +30,7 @@ public class ChessGame extends JPanel {
             frame.setContentPane(layeredPane);
 
             frame.pack();
-            frame.setSize(Game_Width, Game_Height);
+            frame.setSize(Game_Width + 50, Game_Height + 50);
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
 

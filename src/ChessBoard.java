@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
+import java.util.Objects;
 
 public class ChessBoard extends JPanel {
     private Thread thread;
@@ -14,6 +15,30 @@ public class ChessBoard extends JPanel {
     private static int Game_Height = 800;
 
     private static String[] colNames = {"a", "b", "c", "d", "e", "f", "g", "h"};
+
+   /* private String[][] boardInit = {
+            {"Rook", "Knight", "Bishop", "Queen", "King", "Bishop", "Knight", "Rook"},
+            {"Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn"},
+            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
+            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
+            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
+            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
+            {"Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn"},
+            {"Rook", "Knight", "Bishop", "Queen", "King", "Bishop", "Knight", "Rook"},
+    };
+
+    */
+
+    private String[][] boardInit = {
+            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
+            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
+            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
+            {"Empty", "Empty", "Empty", "Pawn", "Empty", "Empty", "Empty", "Empty"},
+            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
+            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
+            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
+            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"}
+    };
 
     private ChessSquare[][] chessBoard = new ChessSquare[ROWS][COLS];
 
@@ -26,7 +51,7 @@ public class ChessBoard extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-           // System.out.println(((JButton) e.getSource()).getName());
+            System.out.println(((JButton) e.getSource()).getName());
 
             if(previousClickedTile == null){
                 previousClickedTile = (ChessSquare) e.getSource();
@@ -41,8 +66,8 @@ public class ChessBoard extends JPanel {
                 //System.out.println(previousClickedTile.getName());
             }
 
-            System.out.println(previousClickedTile.getPiece().validMoves(previousClickedTile.getName()));
-            //System.out.println("run");
+
+            System.out.println(previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name));
 
 
             // set piece function takes in current button position
@@ -75,14 +100,22 @@ public class ChessBoard extends JPanel {
                 add(chessBoard[row][col]);
             }
         }
-
-        PieceObject piece = new PieceObject(5, "Queen", Color.BLACK, 100, 100);
-        chessBoard[0][0].setPiece(piece);
-        GameCanvas.gameManager.addGameObject(piece);
-
-        PieceObject piece1 = new PieceObject(5, "King", Color.BLACK, 200, 200);
-        chessBoard[0][0].setPiece(piece1);
-        GameCanvas.gameManager.addGameObject(piece1);
+            initBoard();
 
     }
+
+    public void initBoard(){
+        for(int row = 0; row < COLS; row ++){
+            for(int col = 0; col < ROWS; col++){
+                if(!boardInit[row][col].equals("Empty")){
+                    int []pos = chessBoard[row][col].getPos();
+                    PieceObject piece = new PieceObject(boardInit[row][col], Color.BLACK, pos[0], pos[1]);
+                    chessBoard[row][col].setPiece(piece);
+                    GameCanvas.gameManager.addGameObject(piece);
+            }
+            }
+
+        }
+    }
+
 }

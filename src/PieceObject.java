@@ -10,7 +10,7 @@ public class PieceObject {
     private static String[] colNames = {"a", "b", "c", "d", "e", "f", "g", "h"};
     static BufferedImage[] PieceSprite = Resources.pieceSheet.getImagesFrom(0, 5);  // make white and black to switch? or 2
 
-    public PieceObject(int value, String name, Color color, int x, int y) {
+    public PieceObject(String name, Color color, int x, int y) {
         this.name = name;
         this.color = color;
         this.x = x;
@@ -23,40 +23,82 @@ public class PieceObject {
 
 
 
-    public ArrayList<String> validMoves(String startingPos) {
-        return new ArrayList<String>();
+    public ArrayList<String> validMoves(String startingPos, String type) {
+        switch (type) {
+            case "Bishop":
+                return moveBishop(startingPos);
+            case "Rook":
+                return moveRook(startingPos);
+            case "Queen":
+                return moveQueen(startingPos);
+            case "Knight":
+                return moveKnight(startingPos);
+            case "King":
+                return moveKing(startingPos);
+            case "Pawn":
+                return movePawn(startingPos);
+        }
+        return null;
     }
 
 
     public ArrayList<String> moveBishop(String startingPos) {
-        ArrayList<String> validMoves = new ArrayList<String>();
+        ArrayList<String> validMoves = new ArrayList<>();
         int x = startingPos.charAt(0) - 97;
         int y = startingPos.charAt(2) - 49;
-        int[] xMoves = {x + 1, x + 1, x - 1, x - 1};
-        int[] yMoves = {y + 1, y - 1, y + 1, y - 1};
-        for (int i = 0; i < 4; i++) {
-            int xTemp = xMoves[i];
-            int yTemp = yMoves[i];
-            while (xTemp >= 0 && xTemp < 8 && yTemp >= 0 && yTemp < 8) {
-                validMoves.add((char) (xTemp + 97) + " " + (yTemp + 1));
-                xTemp = xTemp + xMoves[i];
-                yTemp = yTemp + yMoves[i];
+
+        for(int i =1; i < 8; i ++){
+            if(x+i < 8 && y+i < 8){
+                validMoves.add(colNames[x+i] + " " + (y+i+1));
             }
         }
+        for(int i =1; i < 8; i ++){
+            if(x+i < 8 && y-i >= 0){
+                validMoves.add(colNames[x+i] + " " + (y-i+1));
+            }
+        }
+
+        for(int i =1; i < 8; i ++){
+            if(x-i >= 0 && y+i < 8){
+                validMoves.add(colNames[x-i] + " " + (y+i+1));
+            }
+        }
+
+        for(int i =1; i < 8; i ++){
+            if(x-i >= 0 && y-i >= 0){
+                validMoves.add(colNames[x-i] + " " + (y-i+1));
+            }
+        }
+
         return validMoves;
     }
+
     public ArrayList<String> moveRook(String startingPos){
         ArrayList<String> validMoves = new ArrayList<String>();
         int x = startingPos.charAt(0) - 97;
         int y = startingPos.charAt(2) - 49;
-        for(int i = 0; i < 8; i++){
-            if(i != x){
-                validMoves.add(colNames[i] + " " + (y+1));
-            }
-            if(i != y){
-                validMoves.add(colNames[x] + " " + (i+1));
+
+        for(int i = 1; i < 8; i++){
+            if(x+i < 8){
+                validMoves.add(colNames[x+i] + " " + (y+1));
             }
         }
+        for(int i = 1; i < 8; i++){
+            if(x-i >= 0){
+                validMoves.add(colNames[x-i] + " " + (y+1));
+            }
+        }
+        for(int i = 1; i < 8; i++){
+            if(y+i < 8){
+                validMoves.add(colNames[x] + " " + (y+i+1));
+            }
+        }
+        for(int i = 1; i < 8; i++){
+            if(y-i >= 0){
+                validMoves.add(colNames[x] + " " + (y-i+1));
+            }
+        }
+
         return validMoves;
     }
 
@@ -68,7 +110,7 @@ public class PieceObject {
         return validMoves;
     }
 
-    /*
+
     public ArrayList<String> movePawn(String startingPos){
         ArrayList<String> validMoves = new ArrayList<String>();
         int x = startingPos.charAt(0) - 97;
@@ -91,7 +133,7 @@ public class PieceObject {
         return validMoves;
     }
 
-     */
+
 
     public ArrayList<String> moveKnight(String startingPos) {
         ArrayList<String> validMoves = new ArrayList<String>();
@@ -131,13 +173,13 @@ public class PieceObject {
                 g2d.drawImage(PieceSprite[1], this.x, this.y, 100, 100, null);
                 break;
             case "Rook":
-                g2d.drawImage(PieceSprite[2], this.x, this.y, 100, 100, null);
+                g2d.drawImage(PieceSprite[4], this.x, this.y, 100, 100, null);
                 break;
             case "Bishop":
-                g2d.drawImage(PieceSprite[3], this.x, this.y, 100, 100, null);
+                g2d.drawImage(PieceSprite[2], this.x, this.y, 100, 100, null);
                 break;
             case "Knight":
-                g2d.drawImage(PieceSprite[4], this.x, this.y, 100, 100, null);
+                g2d.drawImage(PieceSprite[3], this.x, this.y, 100, 100, null);
                 break;
             case "Pawn":
                 g2d.drawImage(PieceSprite[5], this.x, this.y, 100, 100, null);
