@@ -16,7 +16,6 @@ public class GameManager {
     }
 
     public void addGameObject(PieceObject gameObject) {
-        System.out.println("Adding the Queen");
         gameObjects.add(gameObject);
     }
 
