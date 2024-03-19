@@ -6,15 +6,12 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
 
 public class ChessBoard extends JPanel {
-    private Thread thread;
-    private BufferStrategy bs;
     private static final int ROWS = 8;
     private static final int COLS = 8;
-    private static int Game_Width = 800;
-    private static int Game_Height = 800;
-
+    private static final int BOARD_SIZE = 800;
+    private static final int FONT_SIZE = 16;
+    private static final int PADDING_RIGHT = 10;
     private static String[] colNames = {"a", "b", "c", "d", "e", "f", "g", "h"};
-
     private ChessSquare[][] chessBoard = new ChessSquare[ROWS][COLS];
 
     private ChessSquare previousClickedTile = null;
@@ -55,16 +52,21 @@ public class ChessBoard extends JPanel {
 
 
     public ChessBoard() {
-        setLayout(new GridLayout(ROWS, COLS));
+        setLayout(new BorderLayout());
+
+        JPanel boardPanel = new JPanel(new GridLayout(ROWS, COLS));
+        JPanel bottomLabels = new JPanel(new GridLayout(1, COLS));
+        JPanel sideLabels = new JPanel(new GridLayout(ROWS, 1));
+
+        Font labelFont = new Font("SansSerif", Font.BOLD, FONT_SIZE);
 
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 ChessSquare currButton = new ChessSquare();
-                currButton.setName(colNames[col] + " " + (ROWS-row));
+                currButton.setName(colNames[col] + " " + (ROWS - row));
                 currButton.setBackground(Color.WHITE);
                 currButton.setBorder(new EmptyBorder(0, 0, 0, 0));
-                currButton.setPos(col * (Game_Width/COLS), row * (Game_Height/ROWS));
-
+                currButton.setPos(col * (BOARD_SIZE / COLS), row * (BOARD_SIZE / ROWS));
 
                 if ((row + col) % 2 == 0) {
                     currButton.setBackground(Color.BLACK);
@@ -72,17 +74,24 @@ public class ChessBoard extends JPanel {
 
                 currButton.addActionListener(pieceListener);
                 chessBoard[row][col] = currButton;
-                add(chessBoard[row][col]);
+                boardPanel.add(chessBoard[row][col]);
             }
+            JLabel sideLabel = new JLabel(String.valueOf(ROWS - row));
+            sideLabel.setHorizontalAlignment(JLabel.CENTER);
+            sideLabel.setFont(labelFont);
+            sideLabel.setBorder(new EmptyBorder(0, 0, PADDING_RIGHT, 0));
+            sideLabels.add(sideLabel);
         }
 
-        PieceObject piece = new PieceObject(5, "Queen", Color.BLACK, 100, 100);
-        chessBoard[0][0].setPiece(piece);
-        GameCanvas.gameManager.addGameObject(piece);
+        for (String colName : colNames) {
+            JLabel bottomLabel = new JLabel(colName);
+            bottomLabel.setHorizontalAlignment(JLabel.CENTER);
+            bottomLabel.setFont(labelFont);
+            bottomLabels.add(bottomLabel);
+        }
 
-        PieceObject piece1 = new PieceObject(5, "King", Color.BLACK, 200, 200);
-        chessBoard[0][0].setPiece(piece1);
-        GameCanvas.gameManager.addGameObject(piece1);
-
+        add(boardPanel, BorderLayout.CENTER);
+        add(bottomLabels, BorderLayout.SOUTH);
+        add(sideLabels, BorderLayout.WEST);
     }
 }
