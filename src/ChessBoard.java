@@ -6,8 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.Objects;
-
 public class ChessBoard extends JPanel {
+
     private Thread thread;
     private BufferStrategy bs;
     private static final int ROWS = 8;
@@ -34,9 +34,9 @@ public class ChessBoard extends JPanel {
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-            {"Empty", "Empty", "Empty", "Rook", "Empty", "Empty", "Empty", "Empty"},
+            {"Empty", "Empty", "Empty", "Queen", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
+            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Knight", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"}
     };
@@ -54,22 +54,37 @@ public class ChessBoard extends JPanel {
         public void actionPerformed(ActionEvent e) {
             //System.out.println(((JButton) e.getSource()).getName());
 
+
             if(previousClickedTile == null){
                 previousClickedTile = (ChessSquare) e.getSource();
                 previousTileColor = previousClickedTile.getBackground();
                 previousClickedTile.setBackground(Color.RED);
             }
+
             else {
                 previousClickedTile.setBackground(previousTileColor);
+                if(previousClickedTile.getPiece() != null ){
+                    // from - to
+                    movePiece(((ChessSquare) e.getSource()).getName());
+                }
                 previousClickedTile = (ChessSquare) e.getSource();
                 previousTileColor = previousClickedTile.getBackground();
                 previousClickedTile.setBackground(Color.RED);
+                resetTileColors();
+
                 //System.out.println(previousClickedTile.getName());
+            }
+            // case for clicking on take can merge ^^
+            if(previousClickedTile.getPiece() != null){
+                displayPossibleMoves(previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name));
             }
 
 
-            System.out.println(previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name));
-            displayPossibleMoves(previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name));
+
+
+
+
+           // System.out.println(previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name));
 
             // set piece function takes in current button position
             // call piece.validateMove()
@@ -82,11 +97,38 @@ public class ChessBoard extends JPanel {
      // function to display possible moves
     public void displayPossibleMoves(ArrayList<String> moves){
         for (String move : moves){
-            System.out.println(move);
-            System.out.println((move.charAt(0)-97) + " " + (move.charAt(2)-49));
-            chessBoard[(move.charAt(0)-97)][(move.charAt(2)-49)].setBackground(Color.GREEN);
-            chessBoard[2][1].setBackground(Color.RED);
+            chessBoard[7-(move.charAt(2)-49)][(move.charAt(0)-97)].setBackground(Color.GREEN);
+        }
+    }
 
+    public void movePiece(String name){
+        int x = name.charAt(0) - 97;
+        int y = 7 - (name.charAt(2) - 49);
+        System.out.println("Going to " + name);
+        if(previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name).contains(name)){
+
+            GameCanvas.gameManager.removeGameObject(previousClickedTile.getPiece());
+            PieceObject piece = new PieceObject(previousClickedTile.getPiece().name, previousClickedTile.getPiece().color, chessBoard[y][x].getPos()[0], chessBoard[y][x].getPos()[1]);
+            chessBoard[y][x].setPiece(piece);
+            GameCanvas.gameManager.addGameObject(piece);
+            previousClickedTile.setPiece(null);
+
+
+
+        }
+
+    }
+
+    public void resetTileColors(){
+        for(int row = 0; row < ROWS; row++){
+            for(int col = 0; col < COLS; col++){
+                if((row + col) % 2 == 0){
+                    chessBoard[row][col].setBackground(Color.WHITE);
+                }
+                else{
+                    chessBoard[row][col].setBackground(Color.BLACK);
+                }
+            }
         }
     }
 
@@ -97,15 +139,16 @@ public class ChessBoard extends JPanel {
             for (int col = 0; col < COLS; col++) {
                 ChessSquare currButton = new ChessSquare();
                 currButton.setName(colNames[col] + " " + (ROWS-row));
-                currButton.setBackground(Color.WHITE);
+                currButton.setBackground(Color.BLACK);
                 currButton.setBorder(new EmptyBorder(0, 0, 0, 0));
                 currButton.setPos(col * (Game_Width/COLS), row * (Game_Height/ROWS));
 
 
                 if ((row + col) % 2 == 0) {
-                    currButton.setBackground(Color.BLACK);
+                    currButton.setBackground(Color.WHITE);
                 }
 
+                currButton.setOpaque(true);
                 currButton.addActionListener(pieceListener);
                 chessBoard[row][col] = currButton;
                 add(chessBoard[row][col]);

@@ -16,6 +16,7 @@ public class ChessSquare extends JButton {
 
     public void setPiece(PieceObject piece) {
         this.piece = piece;
+
     }
 
     public void setPos(int x, int y) {
