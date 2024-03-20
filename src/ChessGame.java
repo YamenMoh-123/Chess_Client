@@ -2,8 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ChessGame extends JPanel {
-     static int Game_Width = 800;
-     static int Game_Height = 800;
+    static int Game_Width = 800;
+    static int Game_Height = 800;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -14,7 +14,7 @@ public class ChessGame extends JPanel {
             frame.setContentPane(homeScreen);
 
             frame.pack();
-            frame.setSize(Game_Width + 50, Game_Height + 50);
+            frame.setSize(Game_Width, Game_Height);
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
         });

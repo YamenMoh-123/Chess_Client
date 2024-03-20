@@ -13,8 +13,8 @@ public class PieceObject {
     public PieceObject(String name, Color color, int x, int y) {
         this.name = name;
         this.color = color;
-        this.x = x;
-        this.y = y;
+        this.x = x+5;
+        this.y = y-10;
     }
 
 
