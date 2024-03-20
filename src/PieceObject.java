@@ -48,11 +48,19 @@ public class PieceObject {
         int y = startingPos.charAt(2) - 49;
 
         for(int i =1; i < 8; i ++){
+           // if(ChessBoard.chessBoard[x-i][y+i].getPiece().color != this.color){  // if there is an enemy piece in the way
+              //  validMoves.add(colNames[x-i] + " " + (y+i+1));
+              //  break;
+           // }
+           // if(ChessBoard.chessBoard[x+i][y+i].getPiece() != null){  // if there is a piece in the way
+            //    break;
+            //}
             if(x+i < 8 && y+i < 8){
                 validMoves.add(colNames[x+i] + " " + (y+i+1));
             }
         }
         for(int i =1; i < 8; i ++){
+
             if(x+i < 8 && y-i >= 0){
                 validMoves.add(colNames[x+i] + " " + (y-i+1));
             }

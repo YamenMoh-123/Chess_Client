@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class ChessBoard extends JPanel {
@@ -33,14 +34,14 @@ public class ChessBoard extends JPanel {
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-            {"Empty", "Empty", "Empty", "Pawn", "Empty", "Empty", "Empty", "Empty"},
+            {"Empty", "Empty", "Empty", "Rook", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"}
     };
 
-    private ChessSquare[][] chessBoard = new ChessSquare[ROWS][COLS];
+    public static ChessSquare[][] chessBoard = new ChessSquare[ROWS][COLS];
 
     private ChessSquare previousClickedTile = null;
     private Color previousTileColor = null;
@@ -51,7 +52,7 @@ public class ChessBoard extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println(((JButton) e.getSource()).getName());
+            //System.out.println(((JButton) e.getSource()).getName());
 
             if(previousClickedTile == null){
                 previousClickedTile = (ChessSquare) e.getSource();
@@ -68,7 +69,7 @@ public class ChessBoard extends JPanel {
 
 
             System.out.println(previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name));
-
+            displayPossibleMoves(previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name));
 
             // set piece function takes in current button position
             // call piece.validateMove()
@@ -78,6 +79,16 @@ public class ChessBoard extends JPanel {
         }
     };
 
+     // function to display possible moves
+    public void displayPossibleMoves(ArrayList<String> moves){
+        for (String move : moves){
+            System.out.println(move);
+            System.out.println((move.charAt(0)-97) + " " + (move.charAt(2)-49));
+            chessBoard[(move.charAt(0)-97)][(move.charAt(2)-49)].setBackground(Color.GREEN);
+            chessBoard[2][1].setBackground(Color.RED);
+
+        }
+    }
 
     public ChessBoard() {
         setLayout(new GridLayout(ROWS, COLS));
