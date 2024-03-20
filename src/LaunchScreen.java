@@ -25,28 +25,28 @@ class LaunchScreen extends JPanel {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                    // Switch to the chess game screen
-                    ChessBoard chessBoard = new ChessBoard();
-                    GameCanvas gameCanvas = new GameCanvas();
+                // Switch to the chess game screen
+                ChessBoard chessBoard = new ChessBoard();
+                GameCanvas gameCanvas = new GameCanvas();
 
-                    gameCanvas.setOpaque(false);
+                gameCanvas.setOpaque(false);
 
-                    JLayeredPane layeredPane = new JLayeredPane();
-                    layeredPane.setPreferredSize(new Dimension(ChessGame.Game_Width, ChessGame.Game_Height));
+                JLayeredPane layeredPane = new JLayeredPane();
+                layeredPane.setPreferredSize(new Dimension(ChessGame.Game_Width, ChessGame.Game_Height));
 
-                    chessBoard.setBounds(0, 0, ChessGame.Game_Width, ChessGame.Game_Height);
-                    gameCanvas.setBounds(0, 0, ChessGame.Game_Width, ChessGame.Game_Height);
+                chessBoard.setBounds(0, 0, ChessGame.Game_Width, ChessGame.Game_Height);
+                gameCanvas.setBounds(0, 0, ChessGame.Game_Width, ChessGame.Game_Height);
 
-                    layeredPane.add(chessBoard, JLayeredPane.DEFAULT_LAYER);
-                    layeredPane.add(gameCanvas, JLayeredPane.PALETTE_LAYER);
+                layeredPane.add(chessBoard, JLayeredPane.DEFAULT_LAYER);
+                layeredPane.add(gameCanvas, JLayeredPane.PALETTE_LAYER);
 
-                    frame.setContentPane(layeredPane);
-                    frame.revalidate();
-                    frame.repaint();
+                frame.setContentPane(layeredPane);
+                frame.revalidate();
+                frame.repaint();
 
-                    gameCanvas.start();
-                }
-            });
+                gameCanvas.start();
+            }
+        });
 
 
         // Button Panel

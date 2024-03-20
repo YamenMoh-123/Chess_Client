@@ -41,13 +41,12 @@ public class ChessBoard extends JPanel {
 
     public static ChessSquare[][] chessBoard = new ChessSquare[ROWS][COLS];
 
-
     private ChessSquare previousClickedTile = null;
     private Color previousTileColor = null;
- //   public static GameManager gameManager = new GameManager();
+    //   public static GameManager gameManager = new GameManager();
 
     // action listener for the buttons
-     private ActionListener pieceListener = new ActionListener() {
+    private ActionListener pieceListener = new ActionListener() {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -83,7 +82,7 @@ public class ChessBoard extends JPanel {
 
 
 
-           // System.out.println(previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name));
+            // System.out.println(previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name));
 
             // set piece function takes in current button position
             // call piece.validateMove()
@@ -93,7 +92,7 @@ public class ChessBoard extends JPanel {
         }
     };
 
-     // function to display possible moves
+    // function to display possible moves
     public void displayPossibleMoves(ArrayList<String> moves){
         for (String move : moves){
             chessBoard[7-(move.charAt(2)-49)][(move.charAt(0)-97)].setBackground(Color.GREEN);
@@ -143,12 +142,11 @@ public class ChessBoard extends JPanel {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 ChessSquare currButton = new ChessSquare();
-
                 currButton.setName(colNames[col] + " " + (ROWS-row));
                 currButton.setBackground(Color.BLACK);
-              
                 currButton.setBorder(new EmptyBorder(0, 0, 0, 0));
-                currButton.setPos(col * (BOARD_SIZE / COLS), row * (BOARD_SIZE / ROWS));
+                currButton.setPos(col * (BOARD_SIZE/COLS), row * (BOARD_SIZE/ROWS));
+
 
                 if ((row + col) % 2 == 0) {
                     currButton.setBackground(Color.WHITE);
@@ -165,7 +163,17 @@ public class ChessBoard extends JPanel {
             sideLabel.setBorder(new EmptyBorder(0, 0, PADDING_RIGHT, 0));
             sideLabels.add(sideLabel);
         }
-            initBoard();
+        for (String colName : colNames) {
+            JLabel bottomLabel = new JLabel(colName);
+            bottomLabel.setHorizontalAlignment(JLabel.CENTER);
+            bottomLabel.setFont(labelFont);
+            bottomLabels.add(bottomLabel);
+        }
+
+        add(boardPanel, BorderLayout.CENTER);
+        add(bottomLabels, BorderLayout.SOUTH);
+        add(sideLabels, BorderLayout.WEST);
+        initBoard();
 
     }
 
@@ -177,11 +185,10 @@ public class ChessBoard extends JPanel {
                     PieceObject piece = new PieceObject(boardInit[row][col], Color.BLACK, pos[0], pos[1]);
                     chessBoard[row][col].setPiece(piece);
                     GameCanvas.gameManager.addGameObject(piece);
-            }
+                }
             }
 
         }
-
     }
 
 }
