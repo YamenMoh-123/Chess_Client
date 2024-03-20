@@ -6,7 +6,6 @@ public class ChessSquare extends JButton {
     private int y;
 
 
-
     public ChessSquare() {
         super();
     }
@@ -17,6 +16,7 @@ public class ChessSquare extends JButton {
 
     public void setPiece(PieceObject piece) {
         this.piece = piece;
+
     }
 
     public void setPos(int x, int y) {
@@ -24,7 +24,7 @@ public class ChessSquare extends JButton {
         this.y = y;
     }
 
-    public int[] getPosition() {
+    public int[] getPos() {
         return new int[] {x, y};
     }
 }
