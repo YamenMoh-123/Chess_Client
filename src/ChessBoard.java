@@ -29,13 +29,13 @@ public class ChessBoard extends JPanel {
     */
 
     private String[][] boardInit = {
-            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-            {"Empty", "Empty", "Pawn", "Empty", "Empty", "Empty", "Empty", "Queen"},
-            {"Queen", "Empty", "Empty", "Empty", "Pawn", "Empty", "Empty", "Empty"},
-            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
+            {"Empty", "Pawn", "Empty", "Empty", "Empty", "Empty", "Pawn", "Empty"},
+            {"Empty", "Empty", "Empty", "Pawn", "Empty", "Empty", "Empty", "Empty"},
+            {"Empty", "Pawn", "Empty", "Empty", "Empty", "Pawn", "Empty", "Empty"},
+            {"Empty", "Empty", "Pawn", "Empty", "Empty", "Pawn", "Empty", "Queen"},
+            {"Queen", "Pawn", "Empty", "Empty", "Pawn", "Empty", "Empty", "Empty"},
+            {"Empty", "Empty", "Pawn", "Empty", "Empty", "Empty", "Empty", "Empty"},
+            {"Empty", "Empty", "Empty", "Pawn", "Pawn", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"}
     };
 
@@ -100,7 +100,6 @@ public class ChessBoard extends JPanel {
 
         // adds actual position of board from named position
         for (String move : moves){
-            System.out.println("Move: " + move);
             chessBoard[7-(move.charAt(2)-49)][(move.charAt(0)-97)].setBackground(Color.GREEN);
 
         }

@@ -47,34 +47,46 @@ public class PieceObject {
         int x = startingPos.charAt(0) - 97;
         int y = startingPos.charAt(2) - 49;
 
+
+        // top right
         for(int i =1; i < 8; i ++){
-           // if(ChessBoard.chessBoard[x-i][y+i].getPiece().color != this.color){  // if there is an enemy piece in the way
-              //  validMoves.add(colNames[x-i] + " " + (y+i+1));
-              //  break;
-           // }
-           // if(ChessBoard.chessBoard[x+i][y+i].getPiece() != null){  // if there is a piece in the way
-            //    break;
-            //}
             if(x+i < 8 && y+i < 8){
                 validMoves.add(colNames[x+i] + " " + (y+i+1));
+                if(ChessBoard.chessBoard[7-y-i][x+i].getPiece() != null){
+                    break;
+
+                }
             }
         }
+
+        // bottom right
         for(int i =1; i < 8; i ++){
 
             if(x+i < 8 && y-i >= 0){
-                validMoves.add(colNames[x+i] + " " + (y-i+1));
+               validMoves.add(colNames[x+i] + " " + (y-i+1));
+                if(ChessBoard.chessBoard[7-y+i][x+i].getPiece() != null){
+                    break;
+                }
             }
         }
 
+        // top left
         for(int i =1; i < 8; i ++){
             if(x-i >= 0 && y+i < 8){
                 validMoves.add(colNames[x-i] + " " + (y+i+1));
+                if(ChessBoard.chessBoard[7-y-i][x-i].getPiece() != null) {
+                    break;
+                }
             }
         }
 
+        // top right
         for(int i =1; i < 8; i ++){
             if(x-i >= 0 && y-i >= 0){
                 validMoves.add(colNames[x-i] + " " + (y-i+1));
+                if(ChessBoard.chessBoard[7-y+i][x-i].getPiece() != null){
+                    break;
+                }
             }
         }
 
@@ -136,7 +148,7 @@ public class PieceObject {
     public ArrayList<String> moveQueen(String startingPos){
         ArrayList<String> validMoves = new ArrayList<String>();
         validMoves.addAll(moveRook(startingPos));
-       // validMoves.addAll(moveBishop(startingPos));
+        validMoves.addAll(moveBishop(startingPos));
         return validMoves;
     }
 
