@@ -84,26 +84,48 @@ public class PieceObject {
     public ArrayList<String> moveRook(String startingPos){
         ArrayList<String> validMoves = new ArrayList<String>();
         int x = startingPos.charAt(0) - 97;
-        int y = startingPos.charAt(2) - 49;
+        int y = (startingPos.charAt(2) - 48);
 
+        System.out.println("Location: " + x + " " + y);
+
+        //right
         for(int i = 1; i < 8; i++){
-            if(x+i < 8){
-                validMoves.add(colNames[x+i] + " " + (y+1));
+            if (x + i < 8) {
+                validMoves.add(colNames[x+i] + " " + y);
+                if(ChessBoard.chessBoard[8-y][x+i].getPiece() != null){
+                    break;
+                }
             }
         }
+
+        // left
         for(int i = 1; i < 8; i++){
             if(x-i >= 0){
-                validMoves.add(colNames[x-i] + " " + (y+1));
+                validMoves.add(colNames[x-i] + " " + y);
+                if(ChessBoard.chessBoard[8-y][x-i].getPiece() != null) {
+                    break;
+                }
             }
         }
+
+
+        // up
         for(int i = 1; i < 8; i++){
-            if(y+i < 8){
-                validMoves.add(colNames[x] + " " + (y+i+1));
+            if(y+i <= 8){
+                validMoves.add(colNames[x] + " " + (y+i));
+                if (ChessBoard.chessBoard[8-(y+i)][x].getPiece() != null) {
+                    break;
+                }
             }
         }
+
+        // down
         for(int i = 1; i < 8; i++){
-            if(y-i >= 0){
-                validMoves.add(colNames[x] + " " + (y-i+1));
+            if(y-i > 0){
+                validMoves.add(colNames[x] + " " + (y-i));
+                if (ChessBoard.chessBoard[8-(y-i)][x].getPiece() != null) {
+                    break;
+                }
             }
         }
 
@@ -114,7 +136,7 @@ public class PieceObject {
     public ArrayList<String> moveQueen(String startingPos){
         ArrayList<String> validMoves = new ArrayList<String>();
         validMoves.addAll(moveRook(startingPos));
-        validMoves.addAll(moveBishop(startingPos));
+       // validMoves.addAll(moveBishop(startingPos));
         return validMoves;
     }
 
