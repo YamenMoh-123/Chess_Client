@@ -32,9 +32,9 @@ public class ChessBoard extends JPanel {
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-            {"Empty", "Empty", "Empty", "Queen", "Empty", "Empty", "Empty", "Empty"},
+            {"Empty", "Empty", "Pawn", "Empty", "Empty", "Empty", "Empty", "Queen"},
+            {"Queen", "Empty", "Empty", "Empty", "Pawn", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Knight", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"}
     };
@@ -82,6 +82,9 @@ public class ChessBoard extends JPanel {
 
 
 
+
+
+
             // System.out.println(previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name));
 
             // set piece function takes in current button position
@@ -94,12 +97,18 @@ public class ChessBoard extends JPanel {
 
     // function to display possible moves
     public void displayPossibleMoves(ArrayList<String> moves){
+
+        // adds actual position of board from named position
         for (String move : moves){
+            System.out.println("Move: " + move);
             chessBoard[7-(move.charAt(2)-49)][(move.charAt(0)-97)].setBackground(Color.GREEN);
+
         }
     }
 
     public void movePiece(String name){
+
+
         int x = name.charAt(0) - 97;
         int y = 7 - (name.charAt(2) - 49);
         System.out.println("Going to " + name);
@@ -183,6 +192,7 @@ public class ChessBoard extends JPanel {
                 if(!boardInit[row][col].equals("Empty")){
                     int []pos = chessBoard[row][col].getPos();
                     PieceObject piece = new PieceObject(boardInit[row][col], Color.BLACK, pos[0], pos[1]);
+
                     chessBoard[row][col].setPiece(piece);
                     GameCanvas.gameManager.addGameObject(piece);
                 }
