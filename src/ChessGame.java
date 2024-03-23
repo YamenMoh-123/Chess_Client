@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class ChessGame extends JPanel {
     static int Game_Width = 800;
-    static int Game_Height = 800;
+    static int Game_Height = 80 0;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
