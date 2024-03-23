@@ -89,11 +89,10 @@ public class PieceObject {
         System.out.println("Location: " + x + " " + y);
 
         //right
-
         for(int i = 1; i < 8; i++){
             if (x + i < 8) {
                 validMoves.add(colNames[x+i] + " " + y);
-                if(ChessBoard.chessBoard[y][x+i].getPiece() != null){
+                if(ChessBoard.chessBoard[8-y][x+i].getPiece() != null){
                     break;
                 }
             }
@@ -103,7 +102,7 @@ public class PieceObject {
         for(int i = 1; i < 8; i++){
             if(x-i >= 0){
                 validMoves.add(colNames[x-i] + " " + y);
-                if(ChessBoard.chessBoard[y][x-i].getPiece() != null) {
+                if(ChessBoard.chessBoard[8-y][x-i].getPiece() != null) {
                     break;
                 }
             }
@@ -113,14 +112,20 @@ public class PieceObject {
         // up
         for(int i = 1; i < 8; i++){
             if(y+i <= 8){
-              //  validMoves.add(colNames[x] + " " + (y+i));
+                validMoves.add(colNames[x] + " " + (y+i));
+                if (ChessBoard.chessBoard[8-(y+i)][x].getPiece() != null) {
+                    break;
+                }
             }
         }
 
         // down
         for(int i = 1; i < 8; i++){
             if(y-i > 0){
-               // validMoves.add(colNames[x] + " " + (y-i));
+                validMoves.add(colNames[x] + " " + (y-i));
+                if (ChessBoard.chessBoard[8-(y-i)][x].getPiece() != null) {
+                    break;
+                }
             }
         }
 
