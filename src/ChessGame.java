@@ -51,7 +51,8 @@ public class ChessGame extends JPanel {
     }
     public static void main(String[] args) {
         try{
-            InetAddress serverAddress = InetAddress.getByName("192.168.56.1");
+            InetAddress serverAddress = InetAddress.getByName("localhost");
+
             int serverPort = 1234;
             socket = new Socket(serverAddress, serverPort);
             fromServer = new BufferedReader(new InputStreamReader(ChessGame.socket.getInputStream()));
@@ -60,7 +61,7 @@ public class ChessGame extends JPanel {
             ioException.printStackTrace();
         }
         SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Chess Game");
+            JFrame frame = new JFrame("CLIENT");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             LaunchScreen homeScreen = new LaunchScreen(frame);
             frame.setContentPane(homeScreen);
