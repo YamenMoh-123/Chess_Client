@@ -33,25 +33,7 @@ public class ChessBoard extends JPanel {
     private ChessSquare previousClickedTile = null;
     private Color previousTileColor = null;
 
-    JButton endButton = new JButton("End");
     public static JLabel statusLabel;
-
-    private ActionListener endListener = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (moved) {
-                try {
-                    ChessGame.toServer = new PrintWriter(ChessGame.socket.getOutputStream(), true);
-                    ChessGame.toServer.println("YOUR TURN");
-                    String messageFromServer = ChessGame.fromServer.readLine();
-                    System.out.println(turn + " server sent: " + messageFromServer);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
-            moved = false;
-        }
-    };
 
     private ActionListener pieceListener = new ActionListener() {
 
@@ -114,7 +96,21 @@ public class ChessBoard extends JPanel {
             chessBoard[y][x].setPiece(piece);
             GameCanvas.gameManager.addGameObject(piece);
             previousClickedTile.setPiece(null);
+            switchTurn();
         }
+    }
+
+    private void switchTurn() {
+        if (turn.equals("WHITE")) {
+            turn = "BLACK";
+        } else {
+            turn = "WHITE";
+        }
+        updateStatusLabel();
+    }
+
+    private void updateStatusLabel() {
+        statusLabel.setText(turn + " | White: 10.00 | Black: 10.00");
     }
 
     public void resetTileColors() {
@@ -172,8 +168,8 @@ public class ChessBoard extends JPanel {
         add(boardPanel, BorderLayout.CENTER);
         add(bottomLabels, BorderLayout.SOUTH);
         add(sideLabels, BorderLayout.WEST);
-        endButton.addActionListener(endListener);
-        add(endButton, BorderLayout.EAST);
+
+
         initBoard();
 
     }
