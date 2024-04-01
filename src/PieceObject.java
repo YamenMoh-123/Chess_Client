@@ -8,7 +8,7 @@ public class PieceObject {
     Color color;
     int x, y;
     private static String[] colNames = {"a", "b", "c", "d", "e", "f", "g", "h"};
-    static BufferedImage[] PieceSprite = Resources.pieceSheet.getImagesFrom(0, 5);  // make white and black to switch? or 2
+    static BufferedImage[] PieceSprite = Resources.pieceSheet.getImagesFrom(0, 5);  // make white and black to switch? or 2\
     static BufferedImage[] PieceSpriteBlack = Resources.pieceSheet.getImagesFrom(6, 11);  // make white and black to switch? or 2
 
     public PieceObject(String name, Color color, int x, int y) {
@@ -42,6 +42,9 @@ public class PieceObject {
         return null;
     }
 
+    boolean isOpponentPiece(int x, int y){
+        return ChessBoard.chessBoard[y][x].getPiece().color != this.color;
+    }
 
     public ArrayList<String> moveBishop(String startingPos) {
         ArrayList<String> validMoves = new ArrayList<>();
@@ -54,18 +57,22 @@ public class PieceObject {
             if(x+i < 8 && y+i < 8){
                 validMoves.add(colNames[x+i] + " " + (y+i+1));
                 if(ChessBoard.chessBoard[7-y-i][x+i].getPiece() != null){
+                    if(!isOpponentPiece(x+i, 7-y-i)){
+                        validMoves.removeLast();
+                    }
                     break;
-
                 }
             }
         }
 
         // bottom right
         for(int i =1; i < 8; i ++){
-
             if(x+i < 8 && y-i >= 0){
                 validMoves.add(colNames[x+i] + " " + (y-i+1));
                 if(ChessBoard.chessBoard[7-y+i][x+i].getPiece() != null){
+                    if(!isOpponentPiece(x+i, 7-y+i)){
+                        validMoves.removeLast();
+                    }
                     break;
                 }
             }
@@ -76,6 +83,9 @@ public class PieceObject {
             if(x-i >= 0 && y+i < 8){
                 validMoves.add(colNames[x-i] + " " + (y+i+1));
                 if(ChessBoard.chessBoard[7-y-i][x-i].getPiece() != null) {
+                    if(!isOpponentPiece(x-i, 7-y-i)){
+                        validMoves.removeLast();
+                    }
                     break;
                 }
             }
@@ -86,6 +96,9 @@ public class PieceObject {
             if(x-i >= 0 && y-i >= 0){
                 validMoves.add(colNames[x-i] + " " + (y-i+1));
                 if(ChessBoard.chessBoard[7-y+i][x-i].getPiece() != null){
+                    if(!isOpponentPiece(x-i, 7-y+i)){
+                        validMoves.removeLast();
+                    }
                     break;
                 }
             }
@@ -106,6 +119,9 @@ public class PieceObject {
             if (x + i < 8) {
                 validMoves.add(colNames[x+i] + " " + y);
                 if(ChessBoard.chessBoard[8-y][x+i].getPiece() != null){
+                    if (!isOpponentPiece(x+i, 8-y)){
+                        validMoves.removeLast();
+                    }
                     break;
                 }
             }
@@ -116,6 +132,9 @@ public class PieceObject {
             if(x-i >= 0){
                 validMoves.add(colNames[x-i] + " " + y);
                 if(ChessBoard.chessBoard[8-y][x-i].getPiece() != null) {
+                    if (!isOpponentPiece(x-i, 8-y)){
+                        validMoves.removeLast();
+                    }
                     break;
                 }
             }
@@ -127,6 +146,9 @@ public class PieceObject {
             if(y+i <= 8){
                 validMoves.add(colNames[x] + " " + (y+i));
                 if (ChessBoard.chessBoard[8-(y+i)][x].getPiece() != null) {
+                    if (!isOpponentPiece(x, 8-(y+i))){
+                        validMoves.removeLast();
+                    }
                     break;
                 }
             }
@@ -137,6 +159,9 @@ public class PieceObject {
             if(y-i > 0){
                 validMoves.add(colNames[x] + " " + (y-i));
                 if (ChessBoard.chessBoard[8-(y-i)][x].getPiece() != null) {
+                    if (!isOpponentPiece(x, 8-(y-i))){
+                        validMoves.removeLast();
+                    }
                     break;
                 }
             }
