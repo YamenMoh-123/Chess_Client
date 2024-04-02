@@ -33,7 +33,13 @@ public class ChessBoard extends JPanel {
     private ChessSquare previousClickedTile = null;
     private Color previousTileColor = null;
 
+    public static int whiteMin = Integer.parseInt(LaunchScreen.gameTime); // Initial minutes
+    public static int whiteSec = 0; // Initial seconds
+    public static int blackMin = Integer.parseInt(LaunchScreen.gameTime); // Initial minutes
+    public static int blackSec = 0; // Initial seconds
+
     public static JLabel statusLabel;
+    private Timer timer;
 
     private ActionListener pieceListener = new ActionListener() {
 
@@ -59,7 +65,6 @@ public class ChessBoard extends JPanel {
                             ioException.printStackTrace();
                         }
                         turn = "WHITE";
-                        statusLabel.setText(turn + " | White: 10.00 | Black: 10.00");
                     }
 
                 }
@@ -106,11 +111,6 @@ public class ChessBoard extends JPanel {
         } else {
             turn = "WHITE";
         }
-        updateStatusLabel();
-    }
-
-    private void updateStatusLabel() {
-        statusLabel.setText(turn + " | White: 10.00 | Black: 10.00");
     }
 
     public void resetTileColors() {
@@ -133,13 +133,47 @@ public class ChessBoard extends JPanel {
         JPanel sideLabels = new JPanel(new GridLayout(ROWS, 1));
 
         Font labelFont = new Font("SansSerif", Font.BOLD, FONT_SIZE);
-        statusLabel = new JLabel(turn + " | White: 10.00 | Black: 10.00");
-
+        statusLabel = new JLabel(turn + " | White: " + whiteMin + ":" + String.format("%02d", whiteSec) + " | Black: " + blackMin + ":" + String.format("%02d", blackSec));
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(turn);
+                if (turn.equals("BLACK")) {
+                    if (blackSec == 0) {
+                        blackMin--;
+                        blackSec = 59;
+                    } else {
+                        blackSec--;
+                        if (blackMin == 0 && blackSec == 0){
+                            timer.stop();
+                            JOptionPane.showMessageDialog(ChessBoard.this, "You lost by time.\n",
+                                    "WHITE WINS", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                    }
+                } else {
+                    if (whiteSec == 0) {
+                        whiteMin--;
+                        whiteSec = 59;
+                    } else {
+                        whiteSec--;
+                        if (whiteMin == 0 && whiteSec == 0){
+                            timer.stop();
+                            JOptionPane.showMessageDialog(ChessBoard.this, "You won by time!\n",
+                                    "BLACK WINS", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                    }
+                }
+                statusLabel.setText(turn + " | White: " + whiteMin + ":" + String.format("%02d", whiteSec) + " | Black: " + blackMin + ":" + String.format("%02d", blackSec));
+            }
+        });
+        timer.start();
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 ChessSquare currButton = new ChessSquare();
                 currButton.setName(colNames[col] + " " + (ROWS - row));
-                currButton.setBackground(Color.BLACK);
+                currButton.setBackground(LaunchScreen.gameColor);
                 currButton.setBorder(new EmptyBorder(0, 0, 0, 0));
                 currButton.setPos(col * (BOARD_SIZE / COLS), row * (BOARD_SIZE / ROWS));
 
