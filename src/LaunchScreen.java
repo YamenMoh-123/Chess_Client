@@ -10,6 +10,8 @@ class LaunchScreen extends JPanel {
     private JFrame frame;
     private JComboBox<String> gameTimeDropdown;
     private JComboBox<String> gameThemeDropdown;
+    public static String gameTime = "1";
+    public static Color gameColor = Color.BLACK;
 
     public LaunchScreen(JFrame frame) {
         this.frame = frame;
@@ -66,8 +68,29 @@ class LaunchScreen extends JPanel {
         buttonPanel.setBackground(Color.LIGHT_GRAY); // Set background color to grey for the button panel
         buttonPanel.setOpaque(false); // Make the panel transparent
         buttonPanel.add(gameTimeDropdown);
+        gameTimeDropdown.addActionListener(e -> {
+            gameTime = gameTimeDropdown.getSelectedItem().toString();
+            gameTime = gameTime.substring(0, gameTime.indexOf(' '));
+            System.out.println(gameTime);
+        });
         buttonPanel.add(startButton);
         buttonPanel.add(gameThemeDropdown);
+        gameThemeDropdown.addActionListener(e -> {
+            switch (gameThemeDropdown.getSelectedItem().toString()) {
+                case "Classic":
+                    gameColor = Color.BLACK;
+                    break;
+                case "Blue":
+                    gameColor = Color.BLUE;
+                    break;
+                case "Purple":
+                    gameColor = Color.PINK;
+                    break;
+                case "Green":
+                    gameColor = Color.GREEN;
+                    break;
+            }
+        });
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 50, 0)); // Set bottom margin
 
         // Add vertical space between logo panel and button panel
@@ -135,6 +158,7 @@ class LaunchScreen extends JPanel {
                 popup.setBorder(BorderFactory.createEmptyBorder()); // Remove border from the popup
                 return popup;
             }
+
         });
 
         comboBox.setRenderer(new DefaultListCellRenderer() {

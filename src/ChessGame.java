@@ -44,7 +44,7 @@ public class ChessGame extends JPanel {
                             ChessBoard.moved = false;
                             ChessBoard.turn = "BLACK";
                             SwingUtilities.invokeLater(() -> {
-                                ChessBoard.statusLabel.setText(ChessBoard.turn + " | White: 10.00 | Black: 10.00");
+                                ChessBoard.statusLabel.setText(ChessBoard.turn + " | White: " + ChessBoard.whiteMin + ":" + String.format("%02d", ChessBoard.whiteSec) + " | Black: " + ChessBoard.blackMin + ":" + String.format("%02d", ChessBoard.blackSec));
                             });
                         }
                     }
