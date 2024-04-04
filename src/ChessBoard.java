@@ -25,14 +25,13 @@ public class ChessBoard extends JPanel {
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Knight", "Empty"},
             {"Empty", "Pawn", "Empty", "Empty", "Empty", "Bishop", "Empty", "Empty"},
-            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"}
+            {"Empty", "Empty", "Empty", "Empty", "Empty", "Bishop", "Empty", "Empty"}
     };
 
     public static ChessSquare[][] chessBoard = new ChessSquare[ROWS][COLS];
 
-    private static ChessSquare previousClickedTile = null;
+    private ChessSquare previousClickedTile = null;
     private Color previousTileColor = null;
-
     public static int whiteMin = Integer.parseInt(LaunchScreen.gameTime); // Initial minutes
     public static int whiteSec = 0; // Initial seconds
     public static int blackMin = Integer.parseInt(LaunchScreen.gameTime); // Initial minutes
@@ -90,7 +89,7 @@ public class ChessBoard extends JPanel {
         }
     }
 
-    public static void movePiece(String name) {
+    public void movePiece(String name) {
         System.out.println(previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name));
         System.out.println("test name " + name + " previous tile" + previousClickedTile);
         int x = name.charAt(0) - 97;
@@ -110,6 +109,21 @@ public class ChessBoard extends JPanel {
             switchTurn();
         }
     }
+
+    public static void moveResponse(int oldx, int oldy, int x, int y){
+        if (chessBoard[y][x].getPiece() != null) {
+            GameCanvas.gameManager.removeGameObject(chessBoard[y][x].getPiece());
+        }
+        String name = chessBoard[oldy][oldx].getPiece().name;
+        GameCanvas.gameManager.removeGameObject(chessBoard[oldy][oldx].getPiece());
+        chessBoard[oldy][oldx].setPiece(null);
+        PieceObject piece = new PieceObject(name, Color.WHITE, chessBoard[y][x].getPos()[0], chessBoard[y][x].getPos()[1]);
+        chessBoard[y][x].setPiece(piece);
+        GameCanvas.gameManager.addGameObject(piece);
+        moved = false;
+        switchTurn();
+    }
+
 
     private static void switchTurn() {
         if (turn.equals("WHITE")) {
@@ -214,15 +228,11 @@ public class ChessBoard extends JPanel {
 
     }
 
-    public static void setTile(int x, int y){
-        previousClickedTile = chessBoard[y][x];
-        System.out.println("set tile " + previousClickedTile);
-    }
-
     public void initBoard() {
         for (int row = 0; row < COLS; row++) {
             for (int col = 0; col < ROWS; col++) {
                 if (!boardInit[row][col].equals("Empty")) {
+                    System.out.println("row " + row + " col " + col);
                     Color color = (row > 3) ? Color.BLACK : Color.WHITE;
                     int[] pos = chessBoard[row][col].getPos();
                     PieceObject piece = new PieceObject(boardInit[row][col], color, pos[0], pos[1]);
