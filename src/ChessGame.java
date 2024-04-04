@@ -15,12 +15,13 @@ public class ChessGame extends JPanel {
     public static Socket socket;
     public static BufferedReader fromServer;
     public static PrintWriter toServer;
+    public static String notification;
     public static void handleServerNotifications() {
         new Thread(() -> {
             try {
                 while (true) {
                     // Listen for notifications from the server
-                    String notification = ChessGame.fromServer.readLine();
+                    notification = ChessGame.fromServer.readLine();
                     if (notification != null) {
                         // Logic to handle the notification
                         // For example, you can update the game state, display messages to the user, etc.
@@ -29,23 +30,9 @@ public class ChessGame extends JPanel {
                             System.out.println("this" + notification.charAt(4) + " " + notification.charAt(6));
                             int oldX = notification.charAt(0) - 97;
                             int oldY = 7 - (notification.charAt(2) - 49);
-
-                            ChessBoard.setTile(oldX,oldY);
-                            String goingTo = notification.charAt(4) + " " + notification.charAt(6);
-                            System.out.println("Going to " + goingTo);
-                            ChessBoard.movePiece(goingTo);
-
-//                            String name = notification.substring(8);
-//                            GameCanvas.gameManager.removeGameObject(ChessBoard.chessBoard[oldY][oldX].getPiece());
-//                            ChessBoard.chessBoard[oldY][oldX].setPiece(null);
-//                            PieceObject piece = new PieceObject(name, Color.WHITE, ChessBoard.chessBoard[y][x].getPos()[0], ChessBoard.chessBoard[y][x].getPos()[1]);
-//                            ChessBoard.chessBoard[y][x].setPiece(piece);
-//                            GameCanvas.gameManager.addGameObject(piece);
-                            ChessBoard.moved = false;
-                            ChessBoard.turn = "BLACK";
-                            SwingUtilities.invokeLater(() -> {
-                                ChessBoard.statusLabel.setText(ChessBoard.turn + " | White: " + ChessBoard.whiteMin + ":" + String.format("%02d", ChessBoard.whiteSec) + " | Black: " + ChessBoard.blackMin + ":" + String.format("%02d", ChessBoard.blackSec));
-                            });
+                            int x = notification.charAt(4) - 97;
+                            int y = 7 - (notification.charAt(6) - 49);
+                            ChessBoard.moveResponse(oldX, oldY, x, y);
                         }
                     }
                 }
