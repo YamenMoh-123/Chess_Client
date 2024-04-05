@@ -25,7 +25,7 @@ public class ChessGame extends JPanel {
                         // For example, you can update the game state, display messages to the user, etc.
                         System.out.println("Received notification from server: " + notification.substring(8));
                         if (notification.length() > 10) {
-                            System.out.println("this" + notification.charAt(4) + " " + notification.charAt(6));
+                         //   System.out.println("this" + notification.charAt(4) + " " + notification.charAt(6));
                             int oldX = notification.charAt(0) - 97;
                             int oldY = 7 - (notification.charAt(2) - 49);
                             int x = notification.charAt(4) - 97;

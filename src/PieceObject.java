@@ -118,7 +118,7 @@ public class PieceObject {
         int x = startingPos.charAt(0) - 97;
         int y = (startingPos.charAt(2) - 48);
 
-        System.out.println("Location: " + x + " " + y);
+       // System.out.println("Location: " + x + " " + y);
 
         //right
         for(int i = 1; i < 8; i++){
@@ -220,10 +220,10 @@ public class PieceObject {
                 char charValX = (char) (xMoves[i] + 97);
                 int inValX = letterToNumber(charValX);
                 if(ChessBoard.chessBoard[7-yMoves[i]][charValX-97].getPiece() == null || isOpponentPiece(charValX-97,7-yMoves[i])) {
-                    System.out.println(ChessBoard.chessBoard[7-yMoves[i]][charValX-97].getPiece() == null);
-                    System.out.println("checked move: " + inValX + " " + yMoves[i]);
+                 //   System.out.println(ChessBoard.chessBoard[7-yMoves[i]][charValX-97].getPiece() == null);
+                  //  System.out.println("checked move: " + inValX + " " + yMoves[i]);
                     validMoves.add(charValX + " " + (yMoves[i] + 1));
-                    System.out.println(validMoves);
+                  //  System.out.println(validMoves);
                 }
             }
         }
@@ -231,6 +231,9 @@ public class PieceObject {
     }
 
 
+    public boolean isKingChecked() {
+        return false;
+    }
 
     public static int letterToNumber(char letter) {
         return Character.toLowerCase(letter) - 'a';
