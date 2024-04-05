@@ -19,7 +19,7 @@ public class ChessBoard extends JPanel {
     public static boolean moved = true;
     private String[][] boardInit = {
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
+            {"Knight", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Rook", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Queen", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
@@ -99,8 +99,10 @@ public class ChessBoard extends JPanel {
 
 
     public void movePiece(String name) {
-        System.out.println(previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name));
-        System.out.println("test name " + name + " previous tile" + previousClickedTile);
+
+
+        //System.out.println(previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name));
+        //System.out.println("test name " + name + " previous tile" + previousClickedTile);
 
         int x = name.charAt(0) - 97;
         int y = 7 - (name.charAt(2) - 49);
@@ -111,15 +113,32 @@ public class ChessBoard extends JPanel {
             if (chessBoard[y][x].getPiece() != null) {
                 GameCanvas.gameManager.removeGameObject(chessBoard[y][x].getPiece());
             }
-            GameCanvas.gameManager.removeGameObject(previousClickedTile.getPiece());
-            PieceObject piece = new PieceObject(previousClickedTile.getPiece().name, previousClickedTile.getPiece().color, chessBoard[y][x].getPos()[0], chessBoard[y][x].getPos()[1]);
 
-            System.out.println("Set Piece " + piece + " x: " + x + " y: " + y);
-            chessBoard[y][x].setPiece(piece);
-            GameCanvas.gameManager.addGameObject(piece);
+
+            GameCanvas.gameManager.removeGameObject(previousClickedTile.getPiece());
+            if(previousClickedTile.getPiece().name.equals("King")){
+                if(previousClickedTile.getPiece().color == Color.WHITE){
+                    whiteKing = new KingObject(chessBoard[y][x].getPos()[0], chessBoard[y][x].getPos()[1], y, x, Color.WHITE);
+                    GameCanvas.gameManager.addGameObject(whiteKing);
+                    chessBoard[y][x].setPiece(whiteKing);
+                }else{
+                    blackKing = new KingObject(chessBoard[y][x].getPos()[0], chessBoard[y][x].getPos()[1], y, x, Color.BLACK);
+                    GameCanvas.gameManager.addGameObject(blackKing);
+                    chessBoard[y][x].setPiece(blackKing);
+                }
+            }
+            else {
+                PieceObject piece = new PieceObject(previousClickedTile.getPiece().name, previousClickedTile.getPiece().color, chessBoard[y][x].getPos()[0], chessBoard[y][x].getPos()[1]);
+                chessBoard[y][x].setPiece(piece);
+                GameCanvas.gameManager.addGameObject(piece);
+            }
             previousClickedTile.setPiece(null);
             switchTurn();
         }
+
+        System.out.println(blackKing.isKingChecked() + " Checked on client move");
+
+
     }
 
 
@@ -134,6 +153,7 @@ public class ChessBoard extends JPanel {
         chessBoard[y][x].setPiece(piece);
         GameCanvas.gameManager.addGameObject(piece);
         moved = false;
+        System.out.println(blackKing.isKingChecked() + " Checked on server move");
         switchTurn();
     }
 
@@ -245,7 +265,7 @@ public class ChessBoard extends JPanel {
         for (int row = 0; row < COLS; row++) {
             for (int col = 0; col < ROWS; col++) {
                 if (!boardInit[row][col].equals("Empty")) {
-                    System.out.println("row " + row + " col " + col);
+                   // System.out.println("row " + row + " col " + col);
                     Color color = (row > 3) ? Color.BLACK : Color.WHITE;
                     int[] pos = chessBoard[row][col].getPos();
                     PieceObject piece = new PieceObject(boardInit[row][col], color, pos[0], pos[1]);
