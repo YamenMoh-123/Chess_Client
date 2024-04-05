@@ -217,7 +217,14 @@ public class PieceObject {
         int[] yMoves = {y + 1, y - 1, y + 1, y - 1, y + 2, y - 2, y + 2, y - 2};
         for (int i = 0; i < 8; i++) {
             if (xMoves[i] >= 0 && xMoves[i] < 8 && yMoves[i] >= 0 && yMoves[i] < 8) {
-                validMoves.add((char) (xMoves[i] + 97) + " " + (yMoves[i] + 1));
+                char charValX = (char) (xMoves[i] + 97);
+                int inValX = letterToNumber(charValX);
+                if(ChessBoard.chessBoard[7-yMoves[i]][charValX-97].getPiece() == null || isOpponentPiece(charValX-97,7-yMoves[i])) {
+                    System.out.println(ChessBoard.chessBoard[7-yMoves[i]][charValX-97].getPiece() == null);
+                    System.out.println("checked move: " + inValX + " " + yMoves[i]);
+                    validMoves.add(charValX + " " + (yMoves[i] + 1));
+                    System.out.println(validMoves);
+                }
             }
         }
         return validMoves;
@@ -225,10 +232,23 @@ public class PieceObject {
 
 
 
-
-
-
-
+    public static int letterToNumber(char letter) {
+        return Character.toLowerCase(letter) - 'a';
+    }
+  
+    public ArrayList<String> moveKing(String startingPos){
+        ArrayList<String> validMoves = new ArrayList<String>();
+        int x = startingPos.charAt(0) - 97;
+        int y = startingPos.charAt(2) - 49;
+        int[] xMoves = {x+1, x+1, x-1, x-1, x+1, x-1, x, x};
+        int[] yMoves = {y+1, y-1, y+1, y-1, y, y, y+1, y-1};
+        for(int i = 0; i < 8; i++){
+            if(xMoves[i] >= 0 && xMoves[i] < 8 && yMoves[i] >= 0 && yMoves[i] < 8){
+                validMoves.add((char)(xMoves[i]+97) + " " + (yMoves[i]+1));
+            }
+        }
+        return validMoves;
+    }
 
     public void render(Graphics2D g2d) {
         if(this.color == Color.WHITE) {
