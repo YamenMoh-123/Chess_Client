@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
 import java.net.InetAddress;
 
 public class ChessGame extends JPanel {
@@ -37,16 +35,28 @@ public class ChessGame extends JPanel {
                     }
                 }
             } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Opponent disconnected.", "Notice", JOptionPane.INFORMATION_MESSAGE);
                 e.printStackTrace();
             }
         }).start();
     }
+
     public static void main(String[] args) {
         try{
-            InetAddress serverAddress = InetAddress.getByName("localhost");
-
+            JTextField textField = new JTextField(20); // Create a text field
+            JPanel panel = new JPanel();
+            panel.add(new JLabel("Enter the address:"));
+            panel.add(textField);
+            int result = JOptionPane.showConfirmDialog(null, panel, "Enter Name", JOptionPane.OK_CANCEL_OPTION);
+            String userInput = null;
+            if (result == JOptionPane.OK_OPTION) {
+                userInput = textField.getText(); // Get text from the text field
+                if (!userInput.isEmpty()) {
+                    InetAddress serverAddress = InetAddress.getByName(userInput);
+                }
+            }
             int serverPort = 1234;
-            socket = new Socket(serverAddress, serverPort);
+            socket = new Socket(InetAddress.getByName(userInput), serverPort);
             fromServer = new BufferedReader(new InputStreamReader(ChessGame.socket.getInputStream()));
         } catch (
                 IOException ioException) {

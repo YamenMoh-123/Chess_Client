@@ -11,7 +11,7 @@ class LaunchScreen extends JPanel {
     private JComboBox<String> gameTimeDropdown;
     private JComboBox<String> gameThemeDropdown;
     public static String gameTime = "1";
-    public static Color gameColor = Color.BLACK;
+    public static Color gameColor = new Color(47, 47, 47);
 
     public LaunchScreen(JFrame frame) {
         this.frame = frame;
@@ -78,16 +78,16 @@ class LaunchScreen extends JPanel {
         gameThemeDropdown.addActionListener(e -> {
             switch (gameThemeDropdown.getSelectedItem().toString()) {
                 case "Classic":
-                    gameColor = Color.BLACK;
+                    gameColor = new Color(47, 47, 47);
                     break;
                 case "Blue":
-                    gameColor = Color.BLUE;
+                    gameColor = new Color(60, 100, 142);
                     break;
                 case "Purple":
-                    gameColor = Color.PINK;
+                    gameColor = new Color(89, 71, 149);
                     break;
                 case "Green":
-                    gameColor = Color.GREEN;
+                    gameColor = new Color(54, 120, 45);
                     break;
             }
         });
