@@ -52,35 +52,34 @@ public class ChessBoard extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (!moved) {
-                if (previousClickedTile == null) {
-                    if (((ChessSquare) e.getSource()).getPiece() != null && ((ChessSquare) e.getSource()).getPiece().color == Color.BLACK) {
-                        previousClickedTile = (ChessSquare) e.getSource();
-                        previousTileColor = previousClickedTile.getBackground();
-                        previousClickedTile.setBackground(Color.RED);
-                    }
-                } else {
-                    ((ChessSquare) e.getSource()).setBackground(previousTileColor);
+                if (((ChessSquare) e.getSource()).getPiece() != null && ((ChessSquare) e.getSource()).getPiece().color == Color.BLACK) {
+                    resetTileColors();
+                    displayPossibleMoves(((ChessSquare) e.getSource()).getPiece().validMoves(((ChessSquare) e.getSource()).getName(), ((ChessSquare) e.getSource()).getPiece().name));
+                    previousTileColor = ((ChessSquare) e.getSource()).getBackground();
+                    previousClickedTile = (ChessSquare) e.getSource();
+                    previousTileColor = previousClickedTile.getBackground();
+                    previousClickedTile.setBackground(Color.RED);
+                }
+                if((((ChessSquare) e.getSource()).getPiece() == null || ((ChessSquare) e.getSource()).getPiece().color == Color.WHITE) && previousClickedTile != null){
+
                     if (previousClickedTile.getPiece() != null) {
+                        resetTileColors();
+                        previousClickedTile.setBackground(Color.RED);
+                        displayPossibleMoves(previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name));
                         movePiece(((ChessSquare) e.getSource()).getName());
                         try {
                             ChessGame.toServer = new PrintWriter(ChessGame.socket.getOutputStream(), true);
                             ChessGame.toServer.flush();
-                            ChessGame.toServer.println(previousClickedTile.getName() + " " + ((ChessSquare) e.getSource()).getName() + " " +((ChessSquare) e.getSource()).getPiece().name);
-                            moved = true;
+                            if (((ChessSquare) e.getSource()).getPiece() != null) {
+                                ChessGame.toServer.println(previousClickedTile.getName() + " " + ((ChessSquare) e.getSource()).getName() + " " + ((ChessSquare) e.getSource()).getPiece().name);
+                                moved = true;
+                            }
                         } catch (IOException ioException) {
                             ioException.printStackTrace();
                         }
                         turn = "WHITE";
                     }
 
-                }
-                if (previousClickedTile.getPiece() != null && previousClickedTile.getPiece().color == Color.BLACK) {
-                    displayPossibleMoves(previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name));
-                    previousTileColor = previousClickedTile.getBackground();
-                    previousClickedTile.setBackground(Color.RED);
-                } else {
-                    previousClickedTile = (ChessSquare) e.getSource();
-                    resetTileColors();
                 }
                 if (moved){
                     previousClickedTile = null;
@@ -118,6 +117,7 @@ public class ChessBoard extends JPanel {
             chessBoard[y][x].setPiece(piece);
             GameCanvas.gameManager.addGameObject(piece);
             previousClickedTile.setPiece(null);
+            resetTileColors();
             switchTurn();
         }
     }
