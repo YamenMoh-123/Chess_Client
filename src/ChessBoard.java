@@ -54,7 +54,7 @@ public class ChessBoard extends JPanel {
             if (!moved) {
                 if (previousClickedTile == null) {
                     if (((ChessSquare) e.getSource()).getPiece() != null && ((ChessSquare) e.getSource()).getPiece().color == Color.BLACK) {
-                        ChessBoard.previousClickedTile = (ChessSquare) e.getSource();
+                        previousClickedTile = (ChessSquare) e.getSource();
                         previousTileColor = previousClickedTile.getBackground();
                         previousClickedTile.setBackground(Color.RED);
                     }
