@@ -23,14 +23,15 @@ public class ChessGame extends JPanel {
                     if (notification != null) {
                         // Logic to handle the notification
                         // For example, you can update the game state, display messages to the user, etc.
-                        System.out.println("Received notification from server: " + notification.substring(8));
+                        System.out.println("Received notification from server: " + notification);
+                        String[] parts = notification.split(" ");
                         if (notification.length() > 10) {
-                         //   System.out.println("this" + notification.charAt(4) + " " + notification.charAt(6));
-                            int oldX = notification.charAt(0) - 97;
-                            int oldY = 7 - (notification.charAt(2) - 49);
-                            int x = notification.charAt(4) - 97;
-                            int y = 7 - (notification.charAt(6) - 49);
-                            ChessBoard.moveResponse(oldX, oldY, x, y);
+                            int oldX = parts[0].charAt(0) - 97;
+                            int oldY = 7 - (parts[1].charAt(0) - 49);
+                            int x = parts[2].charAt(0) - 97;
+                            int y = 7 - (parts[3].charAt(0) - 49);
+                            boolean enPassant = Boolean.parseBoolean(parts[5]);
+                            ChessBoard.moveResponse(oldX, oldY, x, y, enPassant);
                         }
                     }
                 }
