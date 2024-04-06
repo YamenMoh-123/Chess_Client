@@ -22,7 +22,6 @@ public class ChessBoard extends JPanel {
             {"Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Pawn", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn"},
             {"Rook", "Knight", "Bishop", "Queen", "King", "Bishop", "Knight", "Rook"}
@@ -77,6 +76,7 @@ public class ChessBoard extends JPanel {
                                 moved = true;
                             }
                         } catch (IOException ioException) {
+                            JOptionPane.showMessageDialog(null, "This is a message dialog without a parent frame.", "Notice", JOptionPane.INFORMATION_MESSAGE);
                             ioException.printStackTrace();
                         }
                         turn = "WHITE";
@@ -106,17 +106,38 @@ public class ChessBoard extends JPanel {
             if (chessBoard[y][x].getPiece() != null) {
                 GameCanvas.gameManager.removeGameObject(chessBoard[y][x].getPiece());
             }
-            GameCanvas.gameManager.removeGameObject(previousClickedTile.getPiece());
-            System.out.println("Piece can enpasant : " +  previousClickedTile.getPiece().EnPassantAble);
-            PieceObject piece = new PieceObject(previousClickedTile.getPiece().name, previousClickedTile.getPiece().color, chessBoard[y][x].getPos()[0], chessBoard[y][x].getPos()[1], previousClickedTile.getPiece().EnPassantAble );
 
+            GameCanvas.gameManager.removeGameObject(previousClickedTile.getPiece());
+            PieceObject piece = new PieceObject(previousClickedTile.getPiece().name, previousClickedTile.getPiece().color, chessBoard[y][x].getPos()[0], chessBoard[y][x].getPos()[1], previousClickedTile.getPiece().EnPassantAble );
             chessBoard[y][x].setPiece(piece);
             GameCanvas.gameManager.addGameObject(piece);
             unEnpassant(y, x);
+
+            if(previousClickedTile.getPiece().name.equals("King")){
+                if(previousClickedTile.getPiece().color == Color.WHITE){
+                    whiteKing = new KingObject(chessBoard[y][x].getPos()[0], chessBoard[y][x].getPos()[1], y, x, Color.WHITE, false);
+                    GameCanvas.gameManager.addGameObject(whiteKing);
+                    chessBoard[y][x].setPiece(whiteKing);
+                }else{
+                    blackKing = new KingObject(chessBoard[y][x].getPos()[0], chessBoard[y][x].getPos()[1], y, x, Color.BLACK, false);
+                    GameCanvas.gameManager.addGameObject(blackKing);
+                    chessBoard[y][x].setPiece(blackKing);
+                }
+            }
+            else {
+                PieceObject piece = new PieceObject(previousClickedTile.getPiece().name, previousClickedTile.getPiece().color, chessBoard[y][x].getPos()[0], chessBoard[y][x].getPos()[1], false);
+                chessBoard[y][x].setPiece(piece);
+                GameCanvas.gameManager.addGameObject(piece);
+            }
+
             previousClickedTile.setPiece(null);
             resetTileColors();
             switchTurn();
         }
+
+        System.out.println(blackKing.isKingChecked() + " Checked on client move");
+
+
     }
 
 
@@ -132,6 +153,7 @@ public class ChessBoard extends JPanel {
         GameCanvas.gameManager.addGameObject(piece);
 
         moved = false;
+        System.out.println(blackKing.isKingChecked() + " Checked on server move");
         switchTurn();
     }
 
@@ -188,8 +210,8 @@ public class ChessBoard extends JPanel {
                         blackSec--;
                         if (blackMin == 0 && blackSec == 0){
                             timer.stop();
-                            JOptionPane.showMessageDialog(ChessBoard.this, "You lost by time.\n",
-                                    "WHITE WINS", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(ChessBoard.this, "WHITE WINS\nYou lost by time.\n",
+                                    "Notice", JOptionPane.ERROR_MESSAGE);
                             return;
                         }
                     }
@@ -201,8 +223,8 @@ public class ChessBoard extends JPanel {
                         whiteSec--;
                         if (whiteMin == 0 && whiteSec == 0){
                             timer.stop();
-                            JOptionPane.showMessageDialog(ChessBoard.this, "You won by time!\n",
-                                    "BLACK WINS", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(ChessBoard.this, "BLACK WINS\nYou won by time!\n",
+                                    "Notice", JOptionPane.ERROR_MESSAGE);
                             return;
                         }
                     }
