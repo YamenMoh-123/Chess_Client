@@ -18,15 +18,17 @@ public class ChessBoard extends JPanel {
     private static String[] colNames = {"a", "b", "c", "d", "e", "f", "g", "h"};
     public static boolean moved = true;
     private String[][] boardInit = {
+            {"Rook", "Knight", "Bishop", "Queen", "Empty", "Bishop", "Knight", "Rook"},
+            {"Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-            {"Empty", "Rook", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-            {"Empty", "Empty", "Empty", "Queen", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-            {"Empty", "Empty", "Empty", "Empty", "Empty", "Rook", "Knight", "Empty"},
-            {"Empty", "Pawn", "Empty", "Empty", "Empty", "Bishop", "Empty", "Empty"},
-            {"Empty", "Empty", "Empty", "Empty", "Empty", "Bishop", "Empty", "Empty"}
+            {"Empty", "Empty", "Pawn", "Empty", "Empty", "Empty", "Empty", "Empty"},
+            {"Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn"},
+            {"Rook", "Knight", "Bishop", "Queen", "King", "Bishop", "Knight", "Rook"}
     };
+
+
 
     public static ChessSquare[][] chessBoard = new ChessSquare[ROWS][COLS];
 
@@ -246,7 +248,7 @@ public class ChessBoard extends JPanel {
             for (int col = 0; col < ROWS; col++) {
                 if (!boardInit[row][col].equals("Empty")) {
                     System.out.println("row " + row + " col " + col);
-                    Color color = (row > 3) ? Color.BLACK : Color.WHITE;
+                    Color color = (row > 3) ? Color.WHITE : Color.BLACK;
                     int[] pos = chessBoard[row][col].getPos();
                     PieceObject piece = new PieceObject(boardInit[row][col], color, pos[0], pos[1]);
                     chessBoard[row][col].setPiece(piece);
@@ -254,11 +256,11 @@ public class ChessBoard extends JPanel {
                 }
             }
         }
-        whiteKing = new KingObject(chessBoard[5][0].getPos()[0], chessBoard[5][0].getPos()[1], 5, 0, Color.WHITE);
-        blackKing = new KingObject(chessBoard[0][5].getPos()[0], chessBoard[0][5].getPos()[1], 0, 5, Color.BLACK);
+        whiteKing = new KingObject(chessBoard[7][4].getPos()[0], chessBoard[7][4].getPos()[1], 7, 4, Color.WHITE);
+        blackKing = new KingObject(chessBoard[0][4].getPos()[0], chessBoard[0][4].getPos()[1], 0, 4, Color.BLACK);
         GameCanvas.gameManager.addGameObject(whiteKing);
         GameCanvas.gameManager.addGameObject(blackKing);
-        chessBoard[5][0].setPiece(whiteKing);
-        chessBoard[0][5].setPiece(blackKing);
+        chessBoard[7][4].setPiece(whiteKing);
+        chessBoard[0][4].setPiece(blackKing);
     }
 }

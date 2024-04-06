@@ -189,24 +189,38 @@ public class PieceObject {
         ArrayList<String> validMoves = new ArrayList<String>();
         int x = startingPos.charAt(0) - 97;
         int y = startingPos.charAt(2) - 49;
-        if(this.color == Color.WHITE){
-            if(y == 1){
-                validMoves.add((char)(x+97) + " " + (y+2));
-            }
-            if(y+1 < 8){
-                validMoves.add((char)(x+97) + " " + (y+2));
-            }
-        }else{
-            if(y == 6){
-                validMoves.add((char)(x+97) + " " + (y-2));
-            }
-            if(y-1 >= 0){
-                validMoves.add((char)(x+97) + " " + (y-2));
+        System.out.println("Location: " + x + " " + y);
+
+        if(y == 6){
+            if(ChessBoard.chessBoard[2][x].getPiece() == null) {
+                validMoves.add(colNames[x] + " 6");
+                if(ChessBoard.chessBoard[3][x].getPiece() == null) {
+                    validMoves.add(colNames[x] + " 5");
+                }
             }
         }
+        else if(y < 6 && y > 0){
+            if(ChessBoard.chessBoard[8-y][x].getPiece() == null) {
+                validMoves.add(colNames[x] + " " + (y));
+            }
+        }
+        if (x + 1 < 8 && y - 1 >= 0) {
+            if (ChessBoard.chessBoard[7 - y + 1][x + 1].getPiece() != null) {
+                if (isOpponentPiece(x + 1, 7 - y + 1)) {
+                    validMoves.add(colNames[x + 1] + " " + (8 - (y )));
+                }
+            }
+        }
+        if (x - 1 >= 0 && y - 1 >= 0) {
+            if (ChessBoard.chessBoard[7 - y + 1][x - 1].getPiece() != null) {
+                if (isOpponentPiece(x - 1, 7 - y + 1)) {
+                    validMoves.add(colNames[x - 1] + " " + (8 - (y )));
+                }
+            }
+        }
+
         return validMoves;
     }
-
 
 
     public ArrayList<String> moveKnight(String startingPos) {
