@@ -31,7 +31,7 @@ class LaunchScreen extends JPanel {
         gameTimeDropdown.setSelectedIndex(0); // Default selection
 
         // Game Theme Dropdown
-        String[] gameThemes = {"Classic", "Blue", "Purple", "Green"};
+        String[] gameThemes = {"Classic", "Blue", "Purple", "Brown"};
         gameThemeDropdown = createRoundedComboBox(gameThemes, 10, new Dimension(200, 60), Color.WHITE, Color.BLACK, 20);
         gameThemeDropdown.setSelectedIndex(0); // Default selection
 
@@ -81,13 +81,13 @@ class LaunchScreen extends JPanel {
                     gameColor = new Color(47, 47, 47);
                     break;
                 case "Blue":
-                    gameColor = new Color(60, 100, 142);
+                    gameColor = new Color(75,115,153);
                     break;
                 case "Purple":
-                    gameColor = new Color(89, 71, 149);
+                    gameColor = new Color(106,84,151);
                     break;
-                case "Green":
-                    gameColor = new Color(54, 120, 45);
+                case "Brown":
+                    gameColor = new Color(181,136,99);
                     break;
             }
         });

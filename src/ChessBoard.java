@@ -14,6 +14,9 @@ public class ChessBoard extends JPanel {
     private static final int BOARD_SIZE = 800;
     private static final int FONT_SIZE = 16;
     private static final int PADDING_RIGHT = 10;
+
+    public static boolean isCurrentChecked = false;
+
     public static String turn = "WHITE";
     private static String[] colNames = {"a", "b", "c", "d", "e", "f", "g", "h"};
     public static boolean moved = true;
@@ -33,7 +36,8 @@ public class ChessBoard extends JPanel {
     public static ChessSquare[][] chessBoard = new ChessSquare[ROWS][COLS];
 
     private ChessSquare previousClickedTile = null;
-    private Color previousTileColor = null;
+    public static ArrayList<String> previousMoves = null;
+    public static boolean movesShown = false;
     public static int whiteMin = Integer.parseInt(LaunchScreen.gameTime); // Initial minutes
     public static int whiteSec = 0; // Initial seconds
     public static int blackMin = Integer.parseInt(LaunchScreen.gameTime); // Initial minutes
@@ -42,8 +46,11 @@ public class ChessBoard extends JPanel {
     // static white and black king piece objects
     public static PieceObject whiteKing;
     public static PieceObject blackKing;
+    Font labelFont = new Font("SansSerif", Font.BOLD, FONT_SIZE);
 
-    public static JLabel statusLabel;
+    private JLabel whiteTimerLabel;
+    private JLabel blackTimerLabel;
+    private JLabel turnLabel;
     private Timer timer;
     static boolean enPassantHappenedCheck = false;
 
@@ -56,30 +63,34 @@ public class ChessBoard extends JPanel {
         public void actionPerformed(ActionEvent e) {
             if (!moved) {
                 if (((ChessSquare) e.getSource()).getPiece() != null && ((ChessSquare) e.getSource()).getPiece().color == Color.BLACK) {
+                    movesShown = false;
                     resetTileColors();
                     displayPossibleMoves(((ChessSquare) e.getSource()).getPiece().validMoves(((ChessSquare) e.getSource()).getName(), ((ChessSquare) e.getSource()).getPiece().name));
-                    previousTileColor = ((ChessSquare) e.getSource()).getBackground();
                     previousClickedTile = (ChessSquare) e.getSource();
-                    previousTileColor = previousClickedTile.getBackground();
-                    previousClickedTile.setBackground(Color.RED);
+                    previousMoves = previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name);
+                    movesShown = true;
+                    previousClickedTile.setBackground(new Color(205,209,106));
                 }
                 if((((ChessSquare) e.getSource()).getPiece() == null || ((ChessSquare) e.getSource()).getPiece().color == Color.WHITE) && previousClickedTile != null){
-
                     if (previousClickedTile.getPiece() != null) {
                         resetTileColors();
-                        previousClickedTile.setBackground(Color.RED);
+                        previousClickedTile.setBackground(new Color(205,209,106));
                         displayPossibleMoves(previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name));
-                        movePiece(((ChessSquare) e.getSource()).getName());
-                        try {
-                            ChessGame.toServer = new PrintWriter(ChessGame.socket.getOutputStream(), true);
-                            ChessGame.toServer.flush();
-                            if (((ChessSquare) e.getSource()).getPiece() != null) {
-                                ChessGame.toServer.println(previousClickedTile.getName() + " " + ((ChessSquare) e.getSource()).getName() + " " + ((ChessSquare) e.getSource()).getPiece().name + " " + ((ChessSquare) e.getSource()).getPiece().EnPassantAble + " " + enPassantHappenedCheck);
-                                moved = true;
+
+
+                        if(movePiece(((ChessSquare) e.getSource()).getName())) {
+                            try {
+                                ChessGame.toServer = new PrintWriter(ChessGame.socket.getOutputStream(), true);
+                                ChessGame.toServer.flush();
+                                if (((ChessSquare) e.getSource()).getPiece() != null) {
+ ChessGame.toServer.println(previousClickedTile.getName() + " " + ((ChessSquare) e.getSource()).getName() + " " + ((ChessSquare) e.getSource()).getPiece().name + " " + ((ChessSquare) e.getSource()).getPiece().EnPassantAble + " " + enPassantHappenedCheck);
+                                    moved = true;
+                                }
+                            } catch (IOException ioException) {
+                                JOptionPane.showMessageDialog(null, "This is a message dialog without a parent frame.", "Notice", JOptionPane.INFORMATION_MESSAGE);
+                                ioException.printStackTrace();
+
                             }
-                        } catch (IOException ioException) {
-                            JOptionPane.showMessageDialog(null, "This is a message dialog without a parent frame.", "Notice", JOptionPane.INFORMATION_MESSAGE);
-                            ioException.printStackTrace();
                         }
                         turn = "WHITE";
                     }
@@ -87,6 +98,8 @@ public class ChessBoard extends JPanel {
                 }
                 if (moved){
                     previousClickedTile = null;
+                    movesShown = false;
+                    Resources.playSound("Resources/Sounds/move-self.wav");
                 }
             }
         }
@@ -94,21 +107,35 @@ public class ChessBoard extends JPanel {
 
     public void displayPossibleMoves(ArrayList<String> moves) {
         for (String move : moves) {
-            chessBoard[7 - (move.charAt(2) - 49)][(move.charAt(0) - 97)].setBackground(Color.GREEN);
+            if (chessBoard[7 - (move.charAt(2) - 49)][(move.charAt(0) - 97)].getPiece() != null) {
+                chessBoard[7 - (move.charAt(2) - 49)][(move.charAt(0) - 97)].setBackground(new Color(129,150,105));
+            }
         }
     }
 
 
 
-    public void movePiece(String name) {
+    public boolean movePiece(String name) {
         int x = name.charAt(0) - 97;
         int y = 7 - (name.charAt(2) - 49);
-        System.out.println(x + " " + y);
+      
         ArrayList<String> temp = previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name);
         if (temp.contains(name) || temp.contains( name + " wr") || temp.contains( name + " wl")) {
 
+        PieceObject temp = previousClickedTile.getPiece();
+
+        if(isCurrentChecked) {
+            System.out.println("You are Checked!");
+            // move temp piece. if not check commit move
+        }
+       previousClickedTile.setPiece(temp);
+        isCurrentChecked = blackKing.isKingChecked();
+        // might be behind by 1 tick
+
+
             if (chessBoard[y][x].getPiece() != null ) {
                 GameCanvas.gameManager.removeGameObject(chessBoard[y][x].getPiece());
+                Resources.playSound("Resources/Sounds/capture.wav");
             }
             if(temp.contains(name + " wr") || temp.contains( name + " wl")) {
                 GameCanvas.gameManager.removeGameObject(chessBoard[y-1][x].getPiece());
@@ -137,13 +164,19 @@ public class ChessBoard extends JPanel {
             previousClickedTile.setPiece(null);
             resetTileColors();
             switchTurn();
+
         }
+        System.out.println(blackKing.isKingChecked() + " Checked on client move");
+
+        return true;
+
     }
 
 
     public static void moveResponse(int oldx, int oldy, int x, int y, boolean enPassant, boolean enPassantHappened){
         if (chessBoard[y][x].getPiece() != null) {
             GameCanvas.gameManager.removeGameObject(chessBoard[y][x].getPiece());
+            Resources.playSound("Resources/Sounds/capture.wav");
         }
         if(enPassantHappened){
             GameCanvas.gameManager.removeGameObject(chessBoard[y-1][x].getPiece());
@@ -157,6 +190,9 @@ public class ChessBoard extends JPanel {
         GameCanvas.gameManager.addGameObject(piece);
 
         moved = false;
+
+        isCurrentChecked = blackKing.isKingChecked();
+        System.out.println(isCurrentChecked + " Checked on server move");
         switchTurn();
     }
 
@@ -187,7 +223,7 @@ public class ChessBoard extends JPanel {
                 if ((row + col) % 2 == 0) {
                     chessBoard[row][col].setBackground(Color.WHITE);
                 } else {
-                    chessBoard[row][col].setBackground(Color.GRAY);
+                    chessBoard[row][col].setBackground(LaunchScreen.gameColor);
                 }
             }
         }
@@ -199,9 +235,12 @@ public class ChessBoard extends JPanel {
         JPanel boardPanel = new JPanel(new GridLayout(ROWS, COLS));
         JPanel bottomLabels = new JPanel(new GridLayout(1, COLS));
         JPanel sideLabels = new JPanel(new GridLayout(ROWS, 1));
-
+        JPanel timerPanel = new JPanel(new GridLayout(3, 1));
         Font labelFont = new Font("SansSerif", Font.BOLD, FONT_SIZE);
-        statusLabel = new JLabel(turn + " | White: " + whiteMin + ":" + String.format("%02d", whiteSec) + " | Black: " + blackMin + ":" + String.format("%02d", blackSec));
+
+        whiteTimerLabel = new JLabel("White: " + whiteMin + ":" + String.format("%02d", whiteSec));
+        blackTimerLabel = new JLabel("Black: " + blackMin + ":" + String.format("%02d", blackSec));
+        turnLabel = new JLabel("Turn: " + turn);
         timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -232,8 +271,9 @@ public class ChessBoard extends JPanel {
                         }
                     }
                 }
-                statusLabel.setText(turn + " | White: " + whiteMin + ":" + String.format("%02d", whiteSec) + " | Black: " + blackMin + ":" + String.format("%02d", blackSec));
-            }
+                whiteTimerLabel.setText("White: " + whiteMin + ":" + String.format("%02d", whiteSec));
+                blackTimerLabel.setText("Black: " + blackMin + ":" + String.format("%02d", blackSec));
+                turnLabel.setText("Turn: " + turn);            }
         });
         timer.start();
         for (int row = 0; row < ROWS; row++) {
@@ -265,11 +305,37 @@ public class ChessBoard extends JPanel {
             bottomLabel.setFont(labelFont);
             bottomLabels.add(bottomLabel);
         }
-        add(statusLabel, BorderLayout.NORTH);
-        add(boardPanel, BorderLayout.CENTER);
-        add(bottomLabels, BorderLayout.SOUTH);
-        add(sideLabels, BorderLayout.WEST);
+        timerPanel.setBackground(Color.LIGHT_GRAY);
 
+        // Set font and colors for white timer label
+        whiteTimerLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        whiteTimerLabel.setForeground(Color.BLACK); // Text color
+        whiteTimerLabel.setBackground(Color.WHITE); // Background color
+        whiteTimerLabel.setOpaque(true); // Make background color visible
+
+        // Set font and colors for black timer label
+        blackTimerLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        blackTimerLabel.setForeground(Color.WHITE); // Text color
+        blackTimerLabel.setBackground(Color.BLACK); // Background color
+        blackTimerLabel.setOpaque(true); // Make background color visible
+
+        // Set font and colors for turn label
+        turnLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        turnLabel.setForeground(Color.BLACK); // Text color
+        turnLabel.setBackground(Color.LIGHT_GRAY); // Background color
+        turnLabel.setOpaque(true); // Make background color visible
+
+        timerPanel.add(whiteTimerLabel);
+        timerPanel.add(turnLabel);
+        timerPanel.add(blackTimerLabel);
+
+        JPanel mainPanel = new JPanel(new BorderLayout());
+//        mainPanel.add(timerPanel, BorderLayout.EAST);
+        mainPanel.add(boardPanel, BorderLayout.CENTER);
+        mainPanel.add(bottomLabels, BorderLayout.SOUTH);
+        mainPanel.add(sideLabels, BorderLayout.WEST);
+
+        add(mainPanel);
         initBoard();
 
     }

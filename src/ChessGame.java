@@ -33,6 +33,7 @@ public class ChessGame extends JPanel {
                             boolean enPassant = Boolean.parseBoolean(parts[5]);
                             boolean enPassantHappened = Boolean.parseBoolean(parts[6]);
                             ChessBoard.moveResponse(oldX, oldY, x, y, enPassant, enPassantHappened);
+                            Resources.playSound("Resources/Sounds/move-self.wav");
                         }
                     }
                 }
