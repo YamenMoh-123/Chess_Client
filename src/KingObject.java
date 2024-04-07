@@ -15,6 +15,11 @@ public class KingObject extends PieceObject {
     }
 
     @Override
+    public int[] getPos(){
+        return new int[]{boardX, boardY};
+    }
+
+    @Override
     public ArrayList<String> validMoves(String startingPos, String type) {
         System.out.println(startingPos + " " + type);
         if ("King".equals(type)) {
@@ -31,11 +36,22 @@ public class KingObject extends PieceObject {
         int y = startingPos.charAt(2) - 49;
         int[] xMoves = {x+1, x+1, x-1, x-1, x+1, x-1, x, x};
         int[] yMoves = {y+1, y-1, y+1, y-1, y, y, y+1, y-1};
+        int tempX = boardX;
+        int tempY = boardY;
+
         for(int i = 0; i < 8; i++){
             if(xMoves[i] >= 0 && xMoves[i] < 8 && yMoves[i] >= 0 && yMoves[i] < 8){
-                validMoves.add((char)(xMoves[i]+97) + " " + (yMoves[i]+1));
+                boardX = 7-yMoves[i];
+                boardY = xMoves[i];
+               // System.out.println("TEMP: " + boardX + " " + boardY);
+               // ChessBoard.chessBoard[boardX][boardY].setBackground(Color.YELLOW);
+                if(!isKingChecked()){
+                    validMoves.add((char) (xMoves[i] + 97) + " " + (yMoves[i] + 1));
+                }
             }
         }
+        boardX = tempX;
+        boardY = tempY;
         return validMoves;
     }
 
@@ -43,7 +59,7 @@ public class KingObject extends PieceObject {
     // using boardx and y
     @Override
     public boolean isKingChecked() {
-        System.out.println(boardX + " " + boardY);
+       // System.out.println("Checking Check: " + boardX + " " + boardY);
 
         // checks pieces to the bottom of the king until a piece is encountered, if its a rook or queen, return true if its the opposite color
         for (int i = 1; i < 8; i++) {
@@ -53,6 +69,9 @@ public class KingObject extends PieceObject {
                        System.out.println("Found  "  + ChessBoard.chessBoard[boardX+i][boardY].getPiece().name + (boardX + i) + " " + boardY);
                         return true;
                     }
+                    break;
+                }
+                else{
                     break;
                 }
             }
@@ -67,6 +86,9 @@ public class KingObject extends PieceObject {
                     }
                     break;
                 }
+                else{
+                    break;
+                }
             }
         }
         // checks pieces to the right of the king until a piece is encountered, if its a rook or queen, return true if its the opposite color
@@ -79,6 +101,9 @@ public class KingObject extends PieceObject {
                     }
                     break;
                 }
+                else{
+                    break;
+                }
             }
         }
         // checks pieces to the left of the king until a piece is encountered, if its a rook or queen, return true if its the opposite color
@@ -89,6 +114,9 @@ public class KingObject extends PieceObject {
                         System.out.println("Found  "  + ChessBoard.chessBoard[boardX][boardY-i].getPiece().name + boardX + " " + (boardY - i));
                         return true;
                     }
+                    break;
+                }
+                else {
                     break;
                 }
             }
@@ -106,6 +134,9 @@ public class KingObject extends PieceObject {
                     }
                     break;
                 }
+                else{
+                    break;
+                }
             }
         }
 
@@ -117,6 +148,9 @@ public class KingObject extends PieceObject {
                         System.out.println("Found  "  + ChessBoard.chessBoard[boardX+i][boardY-i].getPiece().name + (boardX + i) + " " + (boardY - i));
                         return true;
                     }
+                    break;
+                }
+                else{
                     break;
                 }
             }
@@ -132,6 +166,9 @@ public class KingObject extends PieceObject {
                     }
                     break;
                 }
+                else{
+                    break;
+                }
             }
         }
 
@@ -143,6 +180,9 @@ public class KingObject extends PieceObject {
                         System.out.println("Found  "  + ChessBoard.chessBoard[boardX-i][boardY-i].getPiece().name + (boardX - i) + " " + (boardY - i));
                         return true;
                     }
+                    break;
+                }
+                else{
                     break;
                 }
             }
@@ -167,6 +207,9 @@ public class KingObject extends PieceObject {
 
        return false;
     }
+
+
+
 
 
 }

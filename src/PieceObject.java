@@ -240,6 +240,10 @@ public class PieceObject {
     }
 
 
+    public int[] getPos(){
+        return new int[]{};
+    }
+
     public void render(Graphics2D g2d) {
         if(this.color == Color.WHITE) {
             switch (this.name) {
