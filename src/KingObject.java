@@ -48,7 +48,7 @@ public class KingObject extends PieceObject {
 
                // System.out.println("TEMP: " + boardX + " " + boardY);
                // ChessBoard.chessBoard[boardX][boardY].setBackground(Color.YELLOW);
-                if(!isKingChecked()){
+                if(!isKingChecked() && ChessBoard.chessBoard[boardX][boardY].getPiece() == null){
                     validMoves.add((char) (xMoves[i] + 97) + " " + (yMoves[i] + 1));
                 }
             }
@@ -205,6 +205,22 @@ public class KingObject extends PieceObject {
                         return true;
                     }
                 }
+            }
+        }
+
+
+        if (boardX + 1 < 8 && boardY - 1 >= 0) { // Southwest
+            if (ChessBoard.chessBoard[boardX + 1][boardY - 1].getPiece() != null &&
+                    ChessBoard.chessBoard[boardX + 1][boardY - 1].getPiece().name.equals("Pawn") &&
+                    ChessBoard.chessBoard[boardX + 1][boardY - 1].getPiece().color == Color.WHITE) {
+                return true;
+            }
+        }
+        if (boardX + 1 < 8 && boardY + 1 < 8) { // Southeast
+            if (ChessBoard.chessBoard[boardX + 1][boardY + 1].getPiece() != null &&
+                    ChessBoard.chessBoard[boardX + 1][boardY + 1].getPiece().name.equals("Pawn") &&
+                    ChessBoard.chessBoard[boardX + 1][boardY + 1].getPiece().color == Color.WHITE) {
+                return true;
             }
         }
 
