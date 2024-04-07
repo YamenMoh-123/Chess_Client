@@ -243,8 +243,6 @@ public class PieceObject {
         for (int i = 1; i < 8; i++) {
             if (x - i >= 0) {
                 validMoves.add(colNames[x - i] + " " + y);
-
-                System.out.println("HERE " + x + " " + y);
                 if (ChessBoard.chessBoard[8 - y][x - i].getPiece() == null) {
                     ChessBoard.chessBoard[8 - y][x - i].setPiece(this);
                     if (ChessBoard.blackKing.isKingChecked()) {
