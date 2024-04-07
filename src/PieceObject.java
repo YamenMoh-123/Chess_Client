@@ -3,6 +3,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class PieceObject {
+    public boolean hasMoved;
     int value;
     String name;
     Color color;
