@@ -11,12 +11,14 @@ public class PieceObject {
     private static String[] colNames = {"a", "b", "c", "d", "e", "f", "g", "h"};
     static BufferedImage[] PieceSprite = Resources.pieceSheet.getImagesFrom(0, 5);  // make white and black to switch? or 2\
     static BufferedImage[] PieceSpriteBlack = Resources.pieceSheet.getImagesFrom(6, 11);  // make white and black to switch? or 2
+    public boolean EnPassantAble;
 
-    public PieceObject(String name, Color color, int x, int y) {
+    public PieceObject(String name, Color color, int x, int y, boolean EnPassantAble) {
         this.name = name;
         this.color = color;
         this.x = x+5;
         this.y = y-10;
+        this.EnPassantAble = EnPassantAble;
     }
 
 
@@ -118,8 +120,6 @@ public class PieceObject {
         int x = startingPos.charAt(0) - 97;
         int y = (startingPos.charAt(2) - 48);
 
-        System.out.println("Location: " + x + " " + y);
-
         //right
         for(int i = 1; i < 8; i++){
             if (x + i < 8) {
@@ -189,24 +189,57 @@ public class PieceObject {
         ArrayList<String> validMoves = new ArrayList<String>();
         int x = startingPos.charAt(0) - 97;
         int y = startingPos.charAt(2) - 49;
-        if(this.color == Color.WHITE){
-            if(y == 1){
-                validMoves.add((char)(x+97) + " " + (y+2));
-            }
-            if(y+1 < 8){
-                validMoves.add((char)(x+97) + " " + (y+2));
-            }
-        }else{
-            if(y == 6){
-                validMoves.add((char)(x+97) + " " + (y-2));
-            }
-            if(y-1 >= 0){
-                validMoves.add((char)(x+97) + " " + (y-2));
+
+        if(y == 6){
+            if(ChessBoard.chessBoard[2][x].getPiece() == null) {
+                validMoves.add(colNames[x] + " 6");
+                if(ChessBoard.chessBoard[3][x].getPiece() == null) {
+                    validMoves.add(colNames[x] + " 5");
+                    EnPassantAble = true;
+                }
             }
         }
+        else if(y < 6 && y > 0){
+            if(ChessBoard.chessBoard[8-y][x].getPiece() == null) {
+                validMoves.add(colNames[x] + " " + (y));
+            }
+        }
+        if (x + 1 < 8 && y - 1 >= 0) {
+            if (ChessBoard.chessBoard[7 - y + 1][x + 1].getPiece() != null) {
+                if (isOpponentPiece(x + 1, 7 - y + 1)) {
+                    validMoves.add(colNames[x + 1] + " " + (y));
+                }
+            }
+        }
+        if (x - 1 >= 0 && y - 1 >= 0) {
+            if (ChessBoard.chessBoard[7 - y + 1][x - 1].getPiece() != null) {
+                if (isOpponentPiece(x - 1, 7 - y + 1)) {
+                    validMoves.add(colNames[x - 1] + " " + (y));
+                }
+            }
+        }
+        if(y == 3){
+            if(x + 1 < 8){
+                ChessBoard.chessBoard[7-y][x+1].setBackground(Color.YELLOW);
+                if(ChessBoard.chessBoard[7-y][x+1].getPiece() != null){
+                    if(ChessBoard.chessBoard[7-y][x+1].getPiece().EnPassantAble){
+                        System.out.println("En Passant");
+                        validMoves.add(colNames[x+1] + " " + (y));
+                    }
+                }
+            }
+            if(x - 1 > 0){
+                if(ChessBoard.chessBoard[7-y][x-1].getPiece() != null){
+                    if(ChessBoard.chessBoard[7-y][x-1].getPiece().EnPassantAble){
+                        System.out.println("En Passant");
+                        validMoves.add(colNames[x-1] + " " + (y));
+                    }
+                }
+            }
+        }
+
         return validMoves;
     }
-
 
 
     public ArrayList<String> moveKnight(String startingPos) {
@@ -220,10 +253,7 @@ public class PieceObject {
                 char charValX = (char) (xMoves[i] + 97);
                 int inValX = letterToNumber(charValX);
                 if(ChessBoard.chessBoard[7-yMoves[i]][charValX-97].getPiece() == null || isOpponentPiece(charValX-97,7-yMoves[i])) {
-                    System.out.println(ChessBoard.chessBoard[7-yMoves[i]][charValX-97].getPiece() == null);
-                    System.out.println("checked move: " + inValX + " " + yMoves[i]);
                     validMoves.add(charValX + " " + (yMoves[i] + 1));
-                    System.out.println(validMoves);
                 }
             }
         }
@@ -231,6 +261,9 @@ public class PieceObject {
     }
 
 
+    public boolean isKingChecked() {
+        return false;
+    }
 
     public static int letterToNumber(char letter) {
         return Character.toLowerCase(letter) - 'a';
