@@ -67,6 +67,13 @@ public class PieceObject {
             if (x + i < 8 && y + i < 8) {
                 validMoves.add(colNames[x + i] + " " + (y + i + 1));
 
+                if (ChessBoard.chessBoard[7 - y - i][x + i].getPiece() == null) {
+                    ChessBoard.chessBoard[7 - y - i][x + i].setPiece(this);
+                    if (ChessBoard.blackKing.isKingChecked()) {
+                        validMoves.remove(validMoves.size() - 1);
+                    }
+                    ChessBoard.chessBoard[7 - y - i][x + i].setPiece(null);
+                }
 
                 if (ChessBoard.chessBoard[7 - y - i][x + i].getPiece() != null) {
                     if (!isOpponentPiece(x + i, 7 - y - i)) {
@@ -81,6 +88,13 @@ public class PieceObject {
         for (int i = 1; i < 8; i++) {
             if (x + i < 8 && y - i >= 0) {
                 validMoves.add(colNames[x + i] + " " + (y - i + 1));
+                if (ChessBoard.chessBoard[7 - y + i][x + i].getPiece() == null) {
+                    ChessBoard.chessBoard[7 - y + i][x + i].setPiece(this);
+                    if (ChessBoard.blackKing.isKingChecked()) {
+                        validMoves.remove(validMoves.size() - 1);
+                    }
+                    ChessBoard.chessBoard[7 - y + i][x + i].setPiece(null);
+                }
 
 
                 if (ChessBoard.chessBoard[7 - y + i][x + i].getPiece() != null) {
@@ -96,6 +110,13 @@ public class PieceObject {
         for (int i = 1; i < 8; i++) {
             if (x - i >= 0 && y + i < 8) {
                 validMoves.add(colNames[x - i] + " " + (y + i + 1));
+                if (ChessBoard.chessBoard[7 - y - i][x - i].getPiece() == null) {
+                    ChessBoard.chessBoard[7 - y - i][x - i].setPiece(this);
+                    if (ChessBoard.blackKing.isKingChecked()) {
+                        validMoves.remove(validMoves.size() - 1);
+                    }
+                    ChessBoard.chessBoard[7 - y - i][x - i].setPiece(null);
+                }
 
                 if (ChessBoard.chessBoard[7 - y - i][x - i].getPiece() != null) {
                     if (!isOpponentPiece(x - i, 7 - y - i)) {
@@ -110,6 +131,13 @@ public class PieceObject {
         for (int i = 1; i < 8; i++) {
             if (x - i >= 0 && y - i >= 0) {
                 validMoves.add(colNames[x - i] + " " + (y - i + 1));
+                if (ChessBoard.chessBoard[7 - y + i][x - i].getPiece() == null) {
+                    ChessBoard.chessBoard[7 - y + i][x - i].setPiece(this);
+                    if (ChessBoard.blackKing.isKingChecked()) {
+                        validMoves.remove(validMoves.size() - 1);
+                    }
+                    ChessBoard.chessBoard[7 - y + i][x - i].setPiece(null);
+                }
 
 
                 if (ChessBoard.chessBoard[7 - y + i][x - i].getPiece() != null) {
@@ -153,6 +181,19 @@ public class PieceObject {
                     if (!isOpponentPiece(x + i, 8 - y)) {
                         validMoves.remove(validMoves.size() - 1);
                     }
+                    else{
+                        PieceObject piece = ChessBoard.chessBoard[8 - y][x + i].getPiece();
+                        // set the piece to null
+                        ChessBoard.chessBoard[8 - y][x + i].setPiece(null);
+                        // move current peice there
+                        ChessBoard.chessBoard[8 - y][x + i].setPiece(this);
+// check if the king is checked
+                        if (ChessBoard.blackKing.isKingChecked()) {
+                            validMoves.remove(validMoves.size() - 1);
+                        }
+                        // set the piece back
+                        ChessBoard.chessBoard[8 - y][x + i].setPiece(piece);
+                    }
                     break;
                 }
             }
@@ -175,6 +216,19 @@ public class PieceObject {
                 if (ChessBoard.chessBoard[8 - y][x - i].getPiece() != null) {
                     if (!isOpponentPiece(x - i, 8 - y)) {
                         validMoves.remove(validMoves.size() - 1);
+                    }
+                    else {
+                        PieceObject piece = ChessBoard.chessBoard[8 - y][x - i].getPiece();
+                        // set the piece to null
+                        ChessBoard.chessBoard[8 - y][x - i].setPiece(null);
+                        // move current peice there
+                        ChessBoard.chessBoard[8 - y][x - i].setPiece(this);
+// check if the king is checked
+                        if (ChessBoard.blackKing.isKingChecked()) {
+                            validMoves.remove(validMoves.size() - 1);
+                        }
+                        // set the piece back
+                        ChessBoard.chessBoard[8 - y][x - i].setPiece(piece);
                     }
                     break;
                 }
@@ -200,6 +254,15 @@ public class PieceObject {
                     if (!isOpponentPiece(x, 8 - (y + i))) {
                         validMoves.remove(validMoves.size() - 1);
                     }
+                    else{
+                        PieceObject piece = ChessBoard.chessBoard[8 - (y + i)][x].getPiece();
+                        ChessBoard.chessBoard[8 - (y + i)][x].setPiece(null);
+                        ChessBoard.chessBoard[8 - (y + i)][x].setPiece(this);
+                        if (ChessBoard.blackKing.isKingChecked()) {
+                            validMoves.remove(validMoves.size() - 1);
+                        }
+                        ChessBoard.chessBoard[8 - (y + i)][x].setPiece(piece);
+                    }
                     break;
                 }
             }
@@ -223,6 +286,15 @@ public class PieceObject {
                 if (ChessBoard.chessBoard[8 - (y - i)][x].getPiece() != null) {
                     if (!isOpponentPiece(x, 8 - (y - i))) {
                         validMoves.remove(validMoves.size() - 1);
+                    }
+                    else{
+                        PieceObject piece = ChessBoard.chessBoard[8 - (y - i)][x].getPiece();
+                        ChessBoard.chessBoard[8 - (y - i)][x].setPiece(null);
+                        ChessBoard.chessBoard[8 - (y - i)][x].setPiece(this);
+                        if (ChessBoard.blackKing.isKingChecked()) {
+                            validMoves.remove(validMoves.size() - 1);
+                        }
+                        ChessBoard.chessBoard[8 - (y - i)][x].setPiece(piece);
                     }
                     break;
                 }
