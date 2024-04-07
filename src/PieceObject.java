@@ -315,7 +315,16 @@ public class PieceObject {
                     break;
             }
         }
-
+        if (ChessBoard.movesShown) {
+            for (String move : ChessBoard.previousMoves) {
+                if (ChessBoard.chessBoard[7 - (move.charAt(2) - 49)][(move.charAt(0) - 97)].getPiece() == null) {
+                    int centerX = ChessBoard.chessBoard[7 - (move.charAt(2) - 49)][(move.charAt(0) - 97)].getX();
+                    int centerY = ChessBoard.chessBoard[7 - (move.charAt(2) - 49)][(move.charAt(0) - 97)].getY();
+                    g2d.setColor(new Color(129,150,105));
+                    g2d.fillOval(centerX + 43, centerY + 35, 30, 30);
+                }
+            }
+        }
     }
 
 
