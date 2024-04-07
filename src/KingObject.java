@@ -51,6 +51,42 @@ public class KingObject extends PieceObject {
                 if(!isKingChecked() && ChessBoard.chessBoard[boardX][boardY].getPiece() == null){
                     validMoves.add((char) (xMoves[i] + 97) + " " + (yMoves[i] + 1));
                 }
+                if(!hasMoved && ChessBoard.chessBoard[0][0].getPiece().name.equals("Rook") && !ChessBoard.chessBoard[0][0].getPiece().hasMoved){
+                    if(ChessBoard.chessBoard[0][1].getPiece() == null && ChessBoard.chessBoard[0][2].getPiece() == null && ChessBoard.chessBoard[0][3].getPiece() == null){
+                        if (!isKingChecked()) {
+                            boardX = 0;
+                            boardY = 1;
+                            if (!isKingChecked()) {
+                                boardX = 0;
+                                boardY = 2;
+                                if (!isKingChecked()) {
+                                    boardX = 0;
+                                    boardY = 3;
+                                    if (!isKingChecked()) {
+                                        validMoves.add("c 8");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                boardX = tempX;
+                boardY = tempY;
+                if(!hasMoved && ChessBoard.chessBoard[0][7].getPiece().name.equals("Rook") && !ChessBoard.chessBoard[0][7].getPiece().hasMoved){
+                    if(ChessBoard.chessBoard[0][5].getPiece() == null && ChessBoard.chessBoard[0][6].getPiece() == null){
+                        if (!isKingChecked()) {
+                            boardX = 0;
+                            boardY = 5;
+                            if (!isKingChecked()) {
+                                boardX = 0;
+                                boardY = 6;
+                                if (!isKingChecked()) {
+                                    validMoves.add("g 8");
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
         boardX = tempX;
