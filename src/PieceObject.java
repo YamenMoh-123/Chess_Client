@@ -49,6 +49,10 @@ public class PieceObject {
         return ChessBoard.chessBoard[y][x].getPiece().color != this.color;
     }
 
+//    boolean isNull(int x, int y){
+//        return ChessBoard.chessBoard[x][y].getPiece() == null;
+//    }
+
     public ArrayList<String> moveKing(String startingPos){
         ArrayList<String> validMoves = new ArrayList<String>();
         return validMoves;
@@ -183,27 +187,18 @@ public class PieceObject {
         validMoves.addAll(moveBishop(startingPos));
         return validMoves;
     }
-
-
     public ArrayList<String> movePawn(String startingPos){
         ArrayList<String> validMoves = new ArrayList<String>();
         int x = startingPos.charAt(0) - 97;
         int y = startingPos.charAt(2) - 49;
+        if(ChessBoard.chessBoard[8-y][x].getPiece() == null) {
+            validMoves.add(colNames[x] + " " + (y));
+            if(ChessBoard.chessBoard[3][x].getPiece() == null && y == 6) {
+                validMoves.add(colNames[x] + " 5");
+                EnPassantAble = true;
+            }
+        }
 
-        if(y == 6){
-            if(ChessBoard.chessBoard[2][x].getPiece() == null) {
-                validMoves.add(colNames[x] + " 6");
-                if(ChessBoard.chessBoard[3][x].getPiece() == null) {
-                    validMoves.add(colNames[x] + " 5");
-                    EnPassantAble = true;
-                }
-            }
-        }
-        else if(y < 6 && y > 0){
-            if(ChessBoard.chessBoard[8-y][x].getPiece() == null) {
-                validMoves.add(colNames[x] + " " + (y));
-            }
-        }
         if (x + 1 < 8 && y - 1 >= 0) {
             if (ChessBoard.chessBoard[7 - y + 1][x + 1].getPiece() != null) {
                 if (isOpponentPiece(x + 1, 7 - y + 1)) {
