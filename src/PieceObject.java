@@ -214,25 +214,22 @@ public class PieceObject {
         if (x - 1 >= 0 && y - 1 >= 0) {
             if (ChessBoard.chessBoard[7 - y + 1][x - 1].getPiece() != null) {
                 if (isOpponentPiece(x - 1, 7 - y + 1)) {
-                    validMoves.add(colNames[x - 1] + " " + (y));
+                    validMoves.add(colNames[x - 1] + " " + (y) );
                 }
             }
         }
         if(y == 3){
             if(x + 1 < 8){
-                ChessBoard.chessBoard[7-y][x+1].setBackground(Color.YELLOW);
                 if(ChessBoard.chessBoard[7-y][x+1].getPiece() != null){
                     if(ChessBoard.chessBoard[7-y][x+1].getPiece().EnPassantAble){
-                        System.out.println("En Passant");
-                        validMoves.add(colNames[x+1] + " " + (y));
+                        validMoves.add(colNames[x+1] + " " + y + " wr");
                     }
                 }
             }
-            if(x - 1 > 0){
+            if(x - 1 > -1){
                 if(ChessBoard.chessBoard[7-y][x-1].getPiece() != null){
                     if(ChessBoard.chessBoard[7-y][x-1].getPiece().EnPassantAble){
-                        System.out.println("En Passant");
-                        validMoves.add(colNames[x-1] + " " + (y));
+                        validMoves.add(colNames[x-1] + " " + y + " wl");
                     }
                 }
             }
