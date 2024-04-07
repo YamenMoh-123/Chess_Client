@@ -9,7 +9,7 @@ public class KingObject extends PieceObject {
     static BufferedImage[] PieceSpriteBlack = Resources.pieceSheet.getImagesFrom(6, 6);
 
     public KingObject(int x, int y, int boardX, int boardY, Color color){
-        super("King", color, x, y);
+        super("King", color, x, y, false);
         this.boardX = boardX;
         this.boardY = boardY;
     }
