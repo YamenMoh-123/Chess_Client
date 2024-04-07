@@ -31,6 +31,7 @@ public class ChessGame extends JPanel {
                             int x = notification.charAt(4) - 97;
                             int y = 7 - (notification.charAt(6) - 49);
                             ChessBoard.moveResponse(oldX, oldY, x, y);
+                            Resources.playSound("Resources/Sounds/move-self.wav");
                         }
                     }
                 }
