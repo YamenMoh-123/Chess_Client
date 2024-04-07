@@ -38,11 +38,14 @@ public class KingObject extends PieceObject {
         int[] yMoves = {y+1, y-1, y+1, y-1, y, y, y+1, y-1};
         int tempX = boardX;
         int tempY = boardY;
+        PieceObject temp = ChessBoard.blackKing;
+        ChessBoard.chessBoard[boardX][boardY].setPiece(null);
 
         for(int i = 0; i < 8; i++){
             if(xMoves[i] >= 0 && xMoves[i] < 8 && yMoves[i] >= 0 && yMoves[i] < 8){
                 boardX = 7-yMoves[i];
                 boardY = xMoves[i];
+
                // System.out.println("TEMP: " + boardX + " " + boardY);
                // ChessBoard.chessBoard[boardX][boardY].setBackground(Color.YELLOW);
                 if(!isKingChecked()){
@@ -52,6 +55,7 @@ public class KingObject extends PieceObject {
         }
         boardX = tempX;
         boardY = tempY;
+        ChessBoard.chessBoard[boardX][boardY].setPiece(temp);
         return validMoves;
     }
 

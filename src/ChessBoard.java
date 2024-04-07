@@ -107,67 +107,20 @@ public class ChessBoard extends JPanel {
     public boolean movePiece(String name) {
 
 
-        //System.out.println(previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name));
-        //System.out.println("test name " + name + " previous tile" + previousClickedTile);
 
         int x = name.charAt(0) - 97;
         int y = 7 - (name.charAt(2) - 49);
-       // System.out.println("Going to " + name);
-        //System.out.println(x);
-        //System.out.println(y);
         PieceObject temp = previousClickedTile.getPiece();
 
-        if(isCurrentChecked){
+        if(isCurrentChecked) {
             System.out.println("You are Checked!");
             // move temp piece. if not check commit move
 
-            if(previousClickedTile.getPiece().name.equals("King")){
-/*
-                PieceObject tempPiece = new KingObject(chessBoard[y][x].getPos()[0], chessBoard[y][x].getPos()[1], y, x, Color.WHITE);
-                // commit temp king move if not check set piece, take own piece
-                ChessBoard.chessBoard[blackKing.getPos()[1]][blackKing.getPos()[0]].setPiece(null);
-                //ChessBoard.chessBoard
-                System.out.println(blackKing.getPos()[1] + " " + blackKing.getPos()[0]);
-                System.out.println(ChessBoard.chessBoard[blackKing.getPos()[1]][ blackKing.getPos()[0]].getPiece());
-                ChessBoard.chessBoard[blackKing.getPos()[1]][blackKing.getPos()[0]].setPiece(null);
-                if(!tempPiece.isKingChecked()){
-                    blackKing = new KingObject(chessBoard[y][x].getPos()[0], chessBoard[y][x].getPos()[1], y, x, Color.BLACK);
-                }
-                else{
-                    System.out.println("Invalid Move");
-                   // return false;
-                }
-
-
- */
-
-            }
-
-
-            else{
-
-                PieceObject tempPiece = new PieceObject(previousClickedTile.getPiece().name, previousClickedTile.getPiece().color, chessBoard[y][x].getPos()[0], chessBoard[y][x].getPos()[1]);
-                previousClickedTile.setPiece(null);
-                ChessBoard.chessBoard[y][x].setPiece(tempPiece);
-                System.out.println("Temp Piece: " + y + " " + x);
-                if(!blackKing.isKingChecked()){
-                    System.out.println("Not Checked");
-                    ChessBoard.chessBoard[y][x].setPiece(previousClickedTile.getPiece());
-                    previousClickedTile.setPiece(null);
-                }
-                else{
-                    System.out.println("Invalid Move");
-                    chessBoard[y][x].setPiece(null);
-                    return false;
-                }
-          }
         }
-
-
-
 
         previousClickedTile.setPiece(temp);
         isCurrentChecked = blackKing.isKingChecked();
+        // might be behind by 1 tick
 
       //  if(!isCurrentChecked){
             if (previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name).contains(name)) {
