@@ -48,7 +48,12 @@ public class PieceObject {
         return ChessBoard.chessBoard[y][x].getPiece().color != this.color;
     }
 
-    public ArrayList<String> moveKing(String startingPos) {
+
+//    boolean isNull(int x, int y){
+//        return ChessBoard.chessBoard[x][y].getPiece() == null;
+//    }
+
+    public ArrayList<String> moveKing(String startingPos){
         ArrayList<String> validMoves = new ArrayList<String>();
         return validMoves;
     }
@@ -348,7 +353,6 @@ public class PieceObject {
         return validMoves;
     }
 
-
        public ArrayList<String> movePawn(String startingPos){
         ArrayList<String> validMoves = new ArrayList<String>();
         int x = startingPos.charAt(0) - 97;
@@ -429,14 +433,7 @@ public class PieceObject {
                             }
                             ChessBoard.chessBoard[7 - yMoves[i]][charValX - 97].setPiece(piece);
                         }
-
-
                 }
-
-
-
-
-
             }
         }
        ChessBoard.previousClickedTile.setPiece(temp);

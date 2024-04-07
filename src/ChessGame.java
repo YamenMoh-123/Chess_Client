@@ -30,9 +30,10 @@ public class ChessGame extends JPanel {
                             int oldY = 7 - (parts[1].charAt(0) - 49);
                             int x = parts[2].charAt(0) - 97;
                             int y = 7 - (parts[3].charAt(0) - 49);
+                            String piece = parts[4];
                             boolean enPassant = Boolean.parseBoolean(parts[5]);
                             boolean enPassantHappened = Boolean.parseBoolean(parts[6]);
-                            ChessBoard.moveResponse(oldX, oldY, x, y, enPassant, enPassantHappened);
+                            ChessBoard.moveResponse(oldX, oldY, x, y, piece, enPassant, enPassantHappened);
                             Resources.playSound("Resources/Sounds/move-self.wav");
                         }
                     }
