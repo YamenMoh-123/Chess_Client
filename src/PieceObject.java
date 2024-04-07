@@ -349,24 +349,18 @@ public class PieceObject {
     }
 
 
-    public ArrayList<String> movePawn(String startingPos) {
+       public ArrayList<String> movePawn(String startingPos){
         ArrayList<String> validMoves = new ArrayList<String>();
         int x = startingPos.charAt(0) - 97;
         int y = startingPos.charAt(2) - 49;
-
-        if (y == 6) {
-            if (ChessBoard.chessBoard[2][x].getPiece() == null) {
-                validMoves.add(colNames[x] + " 6");
-                if (ChessBoard.chessBoard[3][x].getPiece() == null) {
-                    validMoves.add(colNames[x] + " 5");
-                    EnPassantAble = true;
-                }
-            }
-        } else if (y < 6 && y > 0) {
-            if (ChessBoard.chessBoard[8 - y][x].getPiece() == null) {
-                validMoves.add(colNames[x] + " " + (y));
+        if(ChessBoard.chessBoard[8-y][x].getPiece() == null) {
+            validMoves.add(colNames[x] + " " + (y));
+            if(ChessBoard.chessBoard[3][x].getPiece() == null && y == 6) {
+                validMoves.add(colNames[x] + " 5");
+                EnPassantAble = true;
             }
         }
+
         if (x + 1 < 8 && y - 1 >= 0) {
             if (ChessBoard.chessBoard[7 - y + 1][x + 1].getPiece() != null) {
                 if (isOpponentPiece(x + 1, 7 - y + 1)) {
@@ -377,25 +371,22 @@ public class PieceObject {
         if (x - 1 >= 0 && y - 1 >= 0) {
             if (ChessBoard.chessBoard[7 - y + 1][x - 1].getPiece() != null) {
                 if (isOpponentPiece(x - 1, 7 - y + 1)) {
-                    validMoves.add(colNames[x - 1] + " " + (y));
+                    validMoves.add(colNames[x - 1] + " " + (y) );
                 }
             }
         }
-        if (y == 3) {
-            if (x + 1 < 8) {
-                ChessBoard.chessBoard[7 - y][x + 1].setBackground(Color.YELLOW);
-                if (ChessBoard.chessBoard[7 - y][x + 1].getPiece() != null) {
-                    if (ChessBoard.chessBoard[7 - y][x + 1].getPiece().EnPassantAble) {
-                        System.out.println("En Passant");
-                        validMoves.add(colNames[x + 1] + " " + (y));
+        if(y == 3){
+            if(x + 1 < 8){
+                if(ChessBoard.chessBoard[7-y][x+1].getPiece() != null){
+                    if(ChessBoard.chessBoard[7-y][x+1].getPiece().EnPassantAble){
+                        validMoves.add(colNames[x+1] + " " + y + " wr");
                     }
                 }
             }
-            if (x - 1 > 0) {
-                if (ChessBoard.chessBoard[7 - y][x - 1].getPiece() != null) {
-                    if (ChessBoard.chessBoard[7 - y][x - 1].getPiece().EnPassantAble) {
-                        System.out.println("En Passant");
-                        validMoves.add(colNames[x - 1] + " " + (y));
+            if(x - 1 > -1){
+                if(ChessBoard.chessBoard[7-y][x-1].getPiece() != null){
+                    if(ChessBoard.chessBoard[7-y][x-1].getPiece().EnPassantAble){
+                        validMoves.add(colNames[x-1] + " " + y + " wl");
                     }
                 }
             }
