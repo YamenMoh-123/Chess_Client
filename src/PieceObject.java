@@ -17,8 +17,8 @@ public class PieceObject {
     public PieceObject(String name, Color color, int x, int y, boolean EnPassantAble) {
         this.name = name;
         this.color = color;
-        this.x = x + 5;
-        this.y = y - 10;
+        this.x = x;
+        this.y = y;
         this.EnPassantAble = EnPassantAble;
     }
 
@@ -27,6 +27,7 @@ public class PieceObject {
     }
 
 
+    // can use this.name refactor later
     public ArrayList<String> validMoves(String startingPos, String type) {
         switch (type) {
             case "King":
@@ -45,14 +46,11 @@ public class PieceObject {
         return null;
     }
 
+
     boolean isOpponentPiece(int x, int y) {
         return ChessBoard.chessBoard[y][x].getPiece().color != this.color;
     }
 
-
-//    boolean isNull(int x, int y){
-//        return ChessBoard.chessBoard[x][y].getPiece() == null;
-//    }
 
     public ArrayList<String> moveKing(String startingPos) {
         ArrayList<String> validMoves = new ArrayList<String>();
@@ -432,6 +430,7 @@ public class PieceObject {
 
         int[] xMoves = {x + 2, x + 2, x - 2, x - 2, x + 1, x + 1, x - 1, x - 1};
         int[] yMoves = {y + 1, y - 1, y + 1, y - 1, y + 2, y - 2, y + 2, y - 2};
+
         for (int i = 0; i < 8; i++) {
             if (xMoves[i] >= 0 && xMoves[i] < 8 && yMoves[i] >= 0 && yMoves[i] < 8) {
                 char charValX = (char) (xMoves[i] + 97);
@@ -466,9 +465,15 @@ public class PieceObject {
         return false;
     }
 
+    public boolean hasAvailableMoves(){
+        return true;
+    }
+
     public static int letterToNumber(char letter) {
         return Character.toLowerCase(letter) - 'a';
     }
+
+
 
 
     public int[] getPos() {
