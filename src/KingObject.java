@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class KingObject extends PieceObject {
     private int boardX, boardY;
+    private static String[] colNames = {"a", "b", "c", "d", "e", "f", "g", "h"};
 
     static BufferedImage[] PieceSprite = Resources.pieceSheet.getImagesFrom(0, 0);
     static BufferedImage[] PieceSpriteBlack = Resources.pieceSheet.getImagesFrom(6, 6);
@@ -21,7 +22,6 @@ public class KingObject extends PieceObject {
 
     @Override
     public ArrayList<String> validMoves(String startingPos, String type) {
-        System.out.println(startingPos + " " + type);
         if ("King".equals(type)) {
             return moveKing(startingPos);
         }
@@ -110,17 +110,35 @@ public class KingObject extends PieceObject {
     }
 
 
-    // using boardx and y
+    @Override
+    public boolean hasAvailableMoves() {
+
+        for(int row =0; row <8; row ++){
+            for(int col=0; col<8; col++){
+                ChessSquare currSquare = ChessBoard.chessBoard[row][col];
+                ChessBoard.previousClickedTile = currSquare;
+                if(currSquare.getPiece()!=null && currSquare.getPiece().color == Color.BLACK){
+                    String tempPos = (char) (col + 97) + " " + (8 - row);
+                    if(!currSquare.getPiece().validMoves(tempPos, currSquare.getPiece().name).isEmpty()){
+                        return true;
+                    }
+                }
+            }
+        }
+        ChessBoard.previousClickedTile = null;
+        return false;
+    }
+
+
     @Override
     public boolean isKingChecked() {
-        // System.out.println("Checking Check: " + boardX + " " + boardY);
+
 
         // checks pieces to the bottom of the king until a piece is encountered, if its a rook or queen, return true if its the opposite color
         for (int i = 1; i < 8; i++) {
             if (boardX + i < 8 && ChessBoard.chessBoard[boardX + i][boardY].getPiece() != null) {
                 if (ChessBoard.chessBoard[boardX + i][boardY].getPiece().color != this.color) {
                     if (ChessBoard.chessBoard[boardX + i][boardY].getPiece().name.equals("Rook") || ChessBoard.chessBoard[boardX + i][boardY].getPiece().name.equals("Queen")) {
-                        System.out.println("Found  " + ChessBoard.chessBoard[boardX + i][boardY].getPiece().name + (boardX + i) + " " + boardY);
                         return true;
                     }
                     break;
@@ -134,7 +152,6 @@ public class KingObject extends PieceObject {
             if (boardX - i >= 0 && ChessBoard.chessBoard[boardX - i][boardY].getPiece() != null) {
                 if (ChessBoard.chessBoard[boardX - i][boardY].getPiece().color != this.color) {
                     if (ChessBoard.chessBoard[boardX - i][boardY].getPiece().name.equals("Rook") || ChessBoard.chessBoard[boardX - i][boardY].getPiece().name.equals("Queen")) {
-                        System.out.println("Found  " + ChessBoard.chessBoard[boardX - i][boardY].getPiece().name + (boardX - i) + " " + boardY);
                         return true;
                     }
                     break;
@@ -148,7 +165,6 @@ public class KingObject extends PieceObject {
             if (boardY + i < 8 && ChessBoard.chessBoard[boardX][boardY + i].getPiece() != null) {
                 if (ChessBoard.chessBoard[boardX][boardY + i].getPiece().color != this.color) {
                     if (ChessBoard.chessBoard[boardX][boardY + i].getPiece().name.equals("Rook") || ChessBoard.chessBoard[boardX][boardY + i].getPiece().name.equals("Queen")) {
-                        System.out.println("Found  " + ChessBoard.chessBoard[boardX][boardY + i].getPiece().name + boardX + " " + (boardY + i));
                         return true;
                     }
                     break;
@@ -162,7 +178,6 @@ public class KingObject extends PieceObject {
             if (boardY - i >= 0 && ChessBoard.chessBoard[boardX][boardY - i].getPiece() != null) {
                 if (ChessBoard.chessBoard[boardX][boardY - i].getPiece().color != this.color) {
                     if (ChessBoard.chessBoard[boardX][boardY - i].getPiece().name.equals("Rook") || ChessBoard.chessBoard[boardX][boardY - i].getPiece().name.equals("Queen")) {
-                        System.out.println("Found  " + ChessBoard.chessBoard[boardX][boardY - i].getPiece().name + boardX + " " + (boardY - i));
                         return true;
                     }
                     break;
@@ -179,7 +194,6 @@ public class KingObject extends PieceObject {
             if (boardX + i < 8 && boardY + i < 8 && ChessBoard.chessBoard[boardX + i][boardY + i].getPiece() != null) {
                 if (ChessBoard.chessBoard[boardX + i][boardY + i].getPiece().color != this.color) {
                     if (ChessBoard.chessBoard[boardX + i][boardY + i].getPiece().name.equals("Bishop") || ChessBoard.chessBoard[boardX + i][boardY + i].getPiece().name.equals("Queen")) {
-                        System.out.println("Found  " + ChessBoard.chessBoard[boardX + i][boardY + i].getPiece().name + (boardX + i) + " " + (boardY + i));
                         return true;
                     }
                     break;
@@ -194,7 +208,6 @@ public class KingObject extends PieceObject {
             if (boardX + i < 8 && boardY - i >= 0 && ChessBoard.chessBoard[boardX + i][boardY - i].getPiece() != null) {
                 if (ChessBoard.chessBoard[boardX + i][boardY - i].getPiece().color != this.color) {
                     if (ChessBoard.chessBoard[boardX + i][boardY - i].getPiece().name.equals("Bishop") || ChessBoard.chessBoard[boardX + i][boardY - i].getPiece().name.equals("Queen")) {
-                        System.out.println("Found  " + ChessBoard.chessBoard[boardX + i][boardY - i].getPiece().name + (boardX + i) + " " + (boardY - i));
                         return true;
                     }
                     break;
@@ -209,7 +222,6 @@ public class KingObject extends PieceObject {
             if (boardX - i >= 0 && boardY + i < 8 && ChessBoard.chessBoard[boardX - i][boardY + i].getPiece() != null) {
                 if (ChessBoard.chessBoard[boardX - i][boardY + i].getPiece().color != this.color) {
                     if (ChessBoard.chessBoard[boardX - i][boardY + i].getPiece().name.equals("Bishop") || ChessBoard.chessBoard[boardX - i][boardY + i].getPiece().name.equals("Queen")) {
-                        System.out.println("Found  " + ChessBoard.chessBoard[boardX - i][boardY + i].getPiece().name + (boardX - i) + " " + (boardY + i));
                         return true;
                     }
                     break;
@@ -224,7 +236,6 @@ public class KingObject extends PieceObject {
             if (boardX - i >= 0 && boardY - i >= 0 && ChessBoard.chessBoard[boardX - i][boardY - i].getPiece() != null) {
                 if (ChessBoard.chessBoard[boardX - i][boardY - i].getPiece().color != this.color) {
                     if (ChessBoard.chessBoard[boardX - i][boardY - i].getPiece().name.equals("Bishop") || ChessBoard.chessBoard[boardX - i][boardY - i].getPiece().name.equals("Queen")) {
-                        System.out.println("Found  " + ChessBoard.chessBoard[boardX - i][boardY - i].getPiece().name + (boardX - i) + " " + (boardY - i));
                         return true;
                     }
                     break;
@@ -242,7 +253,7 @@ public class KingObject extends PieceObject {
             if (boardX + xKnight[i] >= 0 && boardX + xKnight[i] < 8 && boardY + yKnight[i] >= 0 && boardY + yKnight[i] < 8) {
                 if (ChessBoard.chessBoard[boardX + xKnight[i]][boardY + yKnight[i]].getPiece() != null) {
                     if (ChessBoard.chessBoard[boardX + xKnight[i]][boardY + yKnight[i]].getPiece().name.equals("Knight") && ChessBoard.chessBoard[boardX + xKnight[i]][boardY + yKnight[i]].getPiece().color != this.color) {
-                        System.out.println("Found  " + ChessBoard.chessBoard[boardX + xKnight[i]][boardY + yKnight[i]].getPiece().name + (boardX + xKnight[i]) + " " + (boardY + yKnight[i]));
+
                         return true;
                     }
                 }
@@ -266,8 +277,19 @@ public class KingObject extends PieceObject {
         }
 
 
+        int[] xKing = {1, 1, 1, 0, 0, -1, -1, -1};
+        int[] yKing = {1, 0, -1, 1, -1, 1, 0, -1};
+        for (int i = 0; i < 8; i++) {
+            if (boardX + xKing[i] >= 0 && boardX + xKing[i] < 8 && boardY + yKing[i] >= 0 && boardY + yKing[i] < 8) {
+                if (ChessBoard.chessBoard[boardX + xKing[i]][boardY + yKing[i]].getPiece() != null) {
+                    if (ChessBoard.chessBoard[boardX + xKing[i]][boardY + yKing[i]].getPiece().name.equals("King") && ChessBoard.chessBoard[boardX + xKing[i]][boardY + yKing[i]].getPiece().color != this.color) {
+                        return true;
+                    }
+                }
+            }
+        }
+
         return false;
     }
-
 
 }
