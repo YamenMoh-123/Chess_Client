@@ -51,6 +51,7 @@ public class KingObject extends PieceObject {
                         validMoves.add((char) (xMoves[i] + 97) + " " + (yMoves[i] + 1));
                     }
                 }
+
             }
         }
         boardX = tempX;
@@ -59,7 +60,6 @@ public class KingObject extends PieceObject {
         validMoves.addAll(getMoves());
         return validMoves;
     }
-
 
     public ArrayList<String> getMoves() {
         int tempX = boardX;
@@ -132,6 +132,7 @@ public class KingObject extends PieceObject {
 
     @Override
     public boolean isKingChecked() {
+
 
         // checks pieces to the bottom of the king until a piece is encountered, if its a rook or queen, return true if its the opposite color
         for (int i = 1; i < 8; i++) {
@@ -288,10 +289,7 @@ public class KingObject extends PieceObject {
             }
         }
 
-
-
         return false;
     }
-
 
 }
