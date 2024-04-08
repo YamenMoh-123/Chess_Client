@@ -21,17 +21,17 @@ public class ChessBoard extends JPanel {
     public static String turn = "WHITE";
     private static String[] colNames = {"a", "b", "c", "d", "e", "f", "g", "h"};
     public static boolean moved = true;
-   private String[][] boardInit = {
+
+    private String[][] boardInit = {
             {"Rook", "Knight", "Bishop", "Queen", "Empty", "Bishop", "Knight", "Rook"},
             {"Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-            {"Pawn", "Empty", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn"},
+            {"Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn", "Pawn"},
             {"Rook", "Knight", "Bishop", "Queen", "Empty", "Bishop", "Knight", "Rook"}
     };
-
 
 
 
@@ -65,13 +65,13 @@ public class ChessBoard extends JPanel {
         // init the previous clicked tile as well as attempt to move a piece without a check. i think^ try to use previous clicked tile when possible
         @Override
         public void actionPerformed(ActionEvent e) {
+
             if (!moved) {
                 if (((ChessSquare) e.getSource()).getPiece() != null && ((ChessSquare) e.getSource()).getPiece().color == Color.BLACK) {
                     movesShown = false;
                     resetTileColors();
                     previousClickedTile = (ChessSquare) e.getSource();
 
-                   //  displayPossibleMoves(((ChessSquare) e.getSource()).getPiece().validMoves(((ChessSquare) e.getSource()).getName(), ((ChessSquare) e.getSource()).getPiece().name));
                     displayPossibleMoves(previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name));
                     previousMoves = previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name);
                     movesShown = true;
@@ -207,27 +207,37 @@ public class ChessBoard extends JPanel {
 
 
 
-    public static void moveResponse(int oldx, int oldy, int x, int y, String name, boolean enPassant, boolean enPassantHappened){
-        if (chessBoard[y][x].getPiece() != null) {
-            GameCanvas.gameManager.removeGameObject(chessBoard[y][x].getPiece());
-            chessBoard[y][x].setPiece(null);
-        }
-        if(enPassantHappened){
-            GameCanvas.gameManager.removeGameObject(chessBoard[y+1][x].getPiece());
-            chessBoard[y+1][x].setPiece(null);
-            enPassantHappenedCheck = false;
-        }
-        GameCanvas.gameManager.removeGameObject(chessBoard[oldy][oldx].getPiece());
-        chessBoard[oldy][oldx].setPiece(null);
-        PieceObject piece = new PieceObject(name, Color.WHITE, chessBoard[y][x].getPos()[0], chessBoard[y][x].getPos()[1], enPassant);
-        chessBoard[y][x].setPiece(piece);
-        GameCanvas.gameManager.addGameObject(piece);
+    public static void moveResponse(int oldx, int oldy, int x, int y, String name, boolean enPassant, boolean enPassantHappened) {
 
-        moved = false;
+            if (chessBoard[y][x].getPiece() != null) {
+                GameCanvas.gameManager.removeGameObject(chessBoard[y][x].getPiece());
+                chessBoard[y][x].setPiece(null);
+            }
+            if (enPassantHappened) {
+                GameCanvas.gameManager.removeGameObject(chessBoard[y + 1][x].getPiece());
+                chessBoard[y + 1][x].setPiece(null);
+                enPassantHappenedCheck = false;
+            }
+            GameCanvas.gameManager.removeGameObject(chessBoard[oldy][oldx].getPiece());
+            chessBoard[oldy][oldx].setPiece(null);
+            PieceObject piece = new PieceObject(name, Color.WHITE, chessBoard[y][x].getPos()[0], chessBoard[y][x].getPos()[1], enPassant);
+            chessBoard[y][x].setPiece(piece);
+            GameCanvas.gameManager.addGameObject(piece);
 
-        isCurrentChecked = blackKing.isKingChecked();
-        switchTurn();
+            moved = false;
+            switchTurn();
+
+        if (!blackKing.hasAvailableMoves()) {
+            if(blackKing.isKingChecked()){
+                System.out.println("CheckMate");
+            }
+            else{
+                System.out.println("StaleMate");
+            }
+        }
+
     }
+
 
     private void unEnpassant(int y, int x){
         for (int row = 0; row < ROWS; row++) {
@@ -382,6 +392,8 @@ public class ChessBoard extends JPanel {
                     PieceObject piece = new PieceObject(boardInit[row][col], color, pos[0], pos[1], false);
                     chessBoard[row][col].setPiece(piece);
                     GameCanvas.gameManager.addGameObject(piece);
+
+
                 }
             }
         }
