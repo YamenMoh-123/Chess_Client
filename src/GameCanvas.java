@@ -59,9 +59,22 @@ public class GameCanvas extends JPanel implements Runnable {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
+
+        // Set rendering hints for quality
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Render game
+        // Calculate the center of the component
+        int xCenter = getWidth() / 2;
+        int yCenter = getHeight() / 2;
+
+        // Rotate the canvas 180 degrees around the center point
+        g2d.rotate(Math.toRadians(180), xCenter, yCenter);
+
+        // Render game (after rotation)
         gameManager.render(g2d);
+
+        // If you need to reset the rotation afterwards (e.g., for drawing UI elements that shouldn't be flipped)
+        g2d.rotate(Math.toRadians(-180), xCenter, yCenter);
     }
+
 }

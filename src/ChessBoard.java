@@ -12,9 +12,11 @@ public class ChessBoard extends JPanel {
 
     private static final int ROWS = 8;
     private static final int COLS = 8;
-    private static final int BOARD_SIZE = 800;
+    public static JPanel bottomLabels = new JPanel(new GridLayout(1, COLS));
+    public static JPanel sideLabels = new JPanel(new GridLayout(ROWS, 1));
+    private static final int BOARD_SIZE = 820;
     private static final int FONT_SIZE = 16;
-    private static final int PADDING_RIGHT = 10;
+    private static final int PADDING_RIGHT = 0;
 
     public static boolean isCurrentChecked = false;
 
@@ -65,47 +67,50 @@ public class ChessBoard extends JPanel {
         // init the previous clicked tile as well as attempt to move a piece without a check. i think^ try to use previous clicked tile when possible
         @Override
         public void actionPerformed(ActionEvent e) {
+            ChessSquare clickedSquare = (ChessSquare) e.getSource();
+            ChessSquare flippedSquare = getFlippedSquare(clickedSquare);
+
             if (!moved) {
-                if (((ChessSquare) e.getSource()).getPiece() != null && ((ChessSquare) e.getSource()).getPiece().color == Color.BLACK) {
+                if ((flippedSquare).getPiece() != null && (flippedSquare).getPiece().color == Color.BLACK) {
                     movesShown = false;
                     resetTileColors();
-                    previousClickedTile = (ChessSquare) e.getSource();
+                    previousClickedTile = flippedSquare;
 
                    //  displayPossibleMoves(((ChessSquare) e.getSource()).getPiece().validMoves(((ChessSquare) e.getSource()).getName(), ((ChessSquare) e.getSource()).getPiece().name));
                     displayPossibleMoves(previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name));
                     previousMoves = previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name);
                     movesShown = true;
-                    previousClickedTile.setBackground(new Color(205,209,106));
+                    clickedSquare.setBackground(new Color(205,209,106));
                 }
-                if((((ChessSquare) e.getSource()).getPiece() == null || ((ChessSquare) e.getSource()).getPiece().color == Color.WHITE) && previousClickedTile != null){
+                if(((flippedSquare).getPiece() == null || (flippedSquare).getPiece().color == Color.WHITE) && previousClickedTile != null){
                     if (previousClickedTile.getPiece() != null) {
                         resetTileColors();
                         previousClickedTile.setBackground(new Color(205,209,106));
                         displayPossibleMoves(previousClickedTile.getPiece().validMoves(previousClickedTile.getName(), previousClickedTile.getPiece().name));
 
 
-                        if(movePiece(((ChessSquare) e.getSource()).getName())) {
+                        if(movePiece((flippedSquare).getName())) {
                             try {
                                 ChessGame.toServer = new PrintWriter(ChessGame.socket.getOutputStream(), true);
                                 ChessGame.toServer.flush();
-                                if (previousMoves.contains(((ChessSquare) e.getSource()).getName()) || enPassantHappenedCheck) {
+                                if (previousMoves.contains((flippedSquare).getName()) || enPassantHappenedCheck) {
                                     String name;
                                     if(promoted){
                                         name = "Queen";
                                         promoted = false;
                                     }
                                     else {
-                                        name = ((ChessSquare) e.getSource()).getPiece().name;
+                                        name = (flippedSquare).getPiece().name;
                                     }
                                     if(Objects.equals(name, "King") && Objects.equals(previousClickedTile.getName(), "e 8")){
-                                        if(Objects.equals(((ChessSquare) e.getSource()).getName(), "c 8")){
-                                            ChessGame.toServer.println("8 1" + " " + "d 8" + " " + "Rook" + " " + ((ChessSquare) e.getSource()).getPiece().EnPassantAble + " " + enPassantHappenedCheck);
+                                        if(Objects.equals((flippedSquare).getName(), "c 8")){
+                                            ChessGame.toServer.println("8 1" + " " + "d 8" + " " + "Rook" + " " + (flippedSquare).getPiece().EnPassantAble + " " + enPassantHappenedCheck);
                                         }
-                                        else if(Objects.equals(((ChessSquare) e.getSource()).getName(), "g 1")){
-                                            ChessGame.toServer.println("h 8" + " " + "f 8" + " " + "Rook" + " " + ((ChessSquare) e.getSource()).getPiece().EnPassantAble + " " + enPassantHappenedCheck);
+                                        else if(Objects.equals((flippedSquare).getName(), "g 1")){
+                                            ChessGame.toServer.println("h 8" + " " + "f 8" + " " + "Rook" + " " + (flippedSquare).getPiece().EnPassantAble + " " + enPassantHappenedCheck);
                                         }
                                     }
-                                    ChessGame.toServer.println(previousClickedTile.getName() + " " + ((ChessSquare) e.getSource()).getName() + " " + name + " " + ((ChessSquare) e.getSource()).getPiece().EnPassantAble + " " + enPassantHappenedCheck);
+                                    ChessGame.toServer.println(previousClickedTile.getName() + " " + (flippedSquare).getName() + " " + name + " " + (flippedSquare).getPiece().EnPassantAble + " " + enPassantHappenedCheck);
                                     moved = true;
                                 }
                             } catch (IOException ioException) {
@@ -127,10 +132,26 @@ public class ChessBoard extends JPanel {
         }
     };
 
+    private ChessSquare getFlippedSquare(ChessSquare clickedSquare) {
+        System.out.println(clickedSquare.getName() + " name");
+
+        // Extract row and column from the name
+        // Extract row and column from the name
+        int column = clickedSquare.getName().charAt(0) - 97;
+        int row = 8 - (clickedSquare.getName().charAt(2) - 48);
+
+        System.out.println(column + " " + row);
+
+        return chessBoard[7-row][7-column];
+    }
+
+
     public void displayPossibleMoves(ArrayList<String> moves) {
         for (String move : moves) {
+            ChessSquare square = getFlippedSquare(chessBoard[7 - (move.charAt(2) - 49)][(move.charAt(0) - 97)]);
+
             if (chessBoard[7 - (move.charAt(2) - 49)][(move.charAt(0) - 97)].getPiece() != null && chessBoard[7 - (move.charAt(2) - 49)][(move.charAt(0) - 97)].getPiece().color != Color.BLACK) {
-                chessBoard[7 - (move.charAt(2) - 49)][(move.charAt(0) - 97)].setBackground(new Color(129,150,105));
+                square.setBackground(new Color(129,150,105));
             }
         }
     }
@@ -266,8 +287,7 @@ public class ChessBoard extends JPanel {
         setLayout(new BorderLayout());
 
         JPanel boardPanel = new JPanel(new GridLayout(ROWS, COLS));
-        JPanel bottomLabels = new JPanel(new GridLayout(1, COLS));
-        JPanel sideLabels = new JPanel(new GridLayout(ROWS, 1));
+
         JPanel timerPanel = new JPanel(new GridLayout(3, 1));
         Font labelFont = new Font("SansSerif", Font.BOLD, FONT_SIZE);
 
@@ -326,14 +346,15 @@ public class ChessBoard extends JPanel {
                 chessBoard[row][col] = currButton;
                 boardPanel.add(chessBoard[row][col]);
             }
-            JLabel sideLabel = new JLabel(String.valueOf(ROWS - row));
+            JLabel sideLabel = new JLabel(String.valueOf( row+1));
             sideLabel.setHorizontalAlignment(JLabel.CENTER);
             sideLabel.setFont(labelFont);
             sideLabel.setBorder(new EmptyBorder(0, 0, PADDING_RIGHT, 0));
             sideLabels.add(sideLabel);
         }
         for (String colName : colNames) {
-            JLabel bottomLabel = new JLabel(colName);
+            char reversedColName = (char) ('a' + 'h' - colName.charAt(0));
+            JLabel bottomLabel = new JLabel(String.valueOf(reversedColName));
             bottomLabel.setHorizontalAlignment(JLabel.CENTER);
             bottomLabel.setFont(labelFont);
             bottomLabels.add(bottomLabel);
@@ -363,7 +384,9 @@ public class ChessBoard extends JPanel {
         timerPanel.add(blackTimerLabel);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
-//        mainPanel.add(timerPanel, BorderLayout.EAST);
+        //mainPanel.add(timerPanel, BorderLayout.EAST);
+
+
         mainPanel.add(boardPanel, BorderLayout.CENTER);
         mainPanel.add(bottomLabels, BorderLayout.SOUTH);
         mainPanel.add(sideLabels, BorderLayout.WEST);
@@ -379,7 +402,8 @@ public class ChessBoard extends JPanel {
                 if (!boardInit[row][col].equals("Empty")) {
                     Color color = (row > 3) ? Color.WHITE : Color.BLACK;
                     int[] pos = chessBoard[row][col].getPos();
-                    PieceObject piece = new PieceObject(boardInit[row][col], color, pos[0], pos[1], false);
+                    System.out.println(pos[0] + " " + pos[1]);
+                    PieceObject piece = new PieceObject(boardInit[row][col], color, pos[0]  , pos[1], false);
                     chessBoard[row][col].setPiece(piece);
                     GameCanvas.gameManager.addGameObject(piece);
                 }
