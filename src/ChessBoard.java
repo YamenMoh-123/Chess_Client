@@ -35,13 +35,13 @@ public class ChessBoard extends JPanel {
    */
 
     public static String[][] boardInit = {
-            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
+            {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Queen"},
             {"Empty", "Empty", "Pawn", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Rook", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
-            {"Empty", "Empty", "Empty", "Pawn", "Empty", "Empty", "Rook", "Empty"},
+            {"Empty", "Empty", "Queen", "Pawn", "Empty", "Empty", "Rook", "Empty"},
             {"Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"},
     };
 
