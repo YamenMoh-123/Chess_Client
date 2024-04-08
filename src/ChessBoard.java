@@ -187,7 +187,7 @@ public class ChessBoard extends JPanel {
                         if(Objects.equals(previousClickedTile.getName(), "e 8") && Objects.equals(chessBoard[y][x].getName(), "c 8")){
                             GameCanvas.gameManager.removeGameObject(chessBoard[0][0].getPiece());
                             ChessBoard.chessBoard[0][0].setPiece(null);
-                            PieceObject rook = new PieceObject("Rook", Color.BLACK, chessBoard[0][3].getPos()[0], chessBoard[0][3].getPos()[1], false);
+                            PieceObject rook = new PieceObject("Rook", Color.BLACK, chessBoard[0][3].getPos()[0], chessBoard[0][3].getPos()[1] , false);
                             GameCanvas.gameManager.addGameObject(rook);
                             ChessBoard.chessBoard[0][3].setPiece(rook);
 
@@ -195,7 +195,7 @@ public class ChessBoard extends JPanel {
                         else if(Objects.equals(previousClickedTile.getName(), "e 8") && Objects.equals(chessBoard[y][x].getName(), "g 8")){
                             GameCanvas.gameManager.removeGameObject(chessBoard[0][7].getPiece());
                             ChessBoard.chessBoard[0][7].setPiece(null);
-                            PieceObject rook = new PieceObject("Rook", Color.BLACK, chessBoard[0][5].getPos()[0], chessBoard[0][5].getPos()[1], false);
+                            PieceObject rook = new PieceObject("Rook", Color.BLACK, chessBoard[0][5].getPos()[0], chessBoard[0][5].getPos()[1] , false);
                             GameCanvas.gameManager.addGameObject(rook);
                             ChessBoard.chessBoard[0][5].setPiece(rook);
 
@@ -208,9 +208,9 @@ public class ChessBoard extends JPanel {
                     PieceObject piece;
                     if (Objects.equals(previousClickedTile.getPiece().name, "Pawn") && y == 7) {
                         promoted = true;
-                        piece = new PieceObject("Queen", previousClickedTile.getPiece().color, chessBoard[y][x].getPos()[0], chessBoard[y][x].getPos()[1], previousClickedTile.getPiece().EnPassantAble);
+                        piece = new PieceObject("Queen", previousClickedTile.getPiece().color, chessBoard[y][x].getPos()[0], chessBoard[y][x].getPos()[1] , previousClickedTile.getPiece().EnPassantAble);
                     } else {
-                        piece = new PieceObject(previousClickedTile.getPiece().name, previousClickedTile.getPiece().color, chessBoard[y][x].getPos()[0], chessBoard[y][x].getPos()[1], previousClickedTile.getPiece().EnPassantAble);
+                        piece = new PieceObject(previousClickedTile.getPiece().name, previousClickedTile.getPiece().color, chessBoard[y][x].getPos()[0], chessBoard[y][x].getPos()[1] , previousClickedTile.getPiece().EnPassantAble);
                     }
                     piece.hasMoved = true;
                     chessBoard[y][x].setPiece(piece);
@@ -285,7 +285,6 @@ public class ChessBoard extends JPanel {
 
     public ChessBoard() {
         setLayout(new BorderLayout());
-
         JPanel boardPanel = new JPanel(new GridLayout(ROWS, COLS));
 
         JPanel timerPanel = new JPanel(new GridLayout(3, 1));
@@ -293,7 +292,7 @@ public class ChessBoard extends JPanel {
 
         whiteTimerLabel = new JLabel("White: " + whiteMin + ":" + String.format("%02d", whiteSec));
         blackTimerLabel = new JLabel("Black: " + blackMin + ":" + String.format("%02d", blackSec));
-        turnLabel = new JLabel("Turn: " + turn);
+        turnLabel = new JLabel("Turn: W" );
         timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -326,7 +325,11 @@ public class ChessBoard extends JPanel {
                 }
                 whiteTimerLabel.setText("White: " + whiteMin + ":" + String.format("%02d", whiteSec));
                 blackTimerLabel.setText("Black: " + blackMin + ":" + String.format("%02d", blackSec));
-                turnLabel.setText("Turn: " + turn);            }
+                if(turn.equals("WHITE")){
+                    turnLabel.setText("Turn: W");}
+                else{
+                    turnLabel.setText("Turn: B");
+                }          }
         });
         timer.start();
         for (int row = 0; row < ROWS; row++) {
@@ -383,13 +386,19 @@ public class ChessBoard extends JPanel {
         timerPanel.add(turnLabel);
         timerPanel.add(blackTimerLabel);
 
+        whiteTimerLabel.setPreferredSize(new Dimension(100, 30));
+        turnLabel.setPreferredSize(new Dimension(100, 30));
+        blackTimerLabel.setPreferredSize(new Dimension(100, 30));
+        bottomLabels.setPreferredSize(new Dimension(BOARD_SIZE, 30));
+        sideLabels.setPreferredSize(new Dimension(30, BOARD_SIZE));
+        boardPanel.setPreferredSize(new Dimension(BOARD_SIZE, BOARD_SIZE));
+
+
         JPanel mainPanel = new JPanel(new BorderLayout());
-        //mainPanel.add(timerPanel, BorderLayout.EAST);
-
-
         mainPanel.add(boardPanel, BorderLayout.CENTER);
         mainPanel.add(bottomLabels, BorderLayout.SOUTH);
         mainPanel.add(sideLabels, BorderLayout.WEST);
+        mainPanel.add(timerPanel, BorderLayout.EAST);
 
         add(mainPanel);
         initBoard();
@@ -400,17 +409,18 @@ public class ChessBoard extends JPanel {
         for (int row = 0; row < COLS; row++) {
             for (int col = 0; col < ROWS; col++) {
                 if (!boardInit[row][col].equals("Empty")) {
+
                     Color color = (row > 3) ? Color.WHITE : Color.BLACK;
                     int[] pos = chessBoard[row][col].getPos();
                     System.out.println(pos[0] + " " + pos[1]);
-                    PieceObject piece = new PieceObject(boardInit[row][col], color, pos[0]  , pos[1], false);
+                    PieceObject piece = new PieceObject(boardInit[row][col], color, pos[0] ,  pos[1] -  (row*2), false);
                     chessBoard[row][col].setPiece(piece);
                     GameCanvas.gameManager.addGameObject(piece);
                 }
             }
         }
-        whiteKing = new KingObject(chessBoard[7][4].getPos()[0], chessBoard[7][4].getPos()[1], 7, 4, Color.WHITE);
-        blackKing = new KingObject(chessBoard[0][4].getPos()[0], chessBoard[0][4].getPos()[1], 0, 4, Color.BLACK);
+        whiteKing = new KingObject(chessBoard[7][4].getPos()[0], chessBoard[7][4].getPos()[1], 7 , 4, Color.WHITE);
+        blackKing = new KingObject(chessBoard[0][4].getPos()[0], chessBoard[0][4].getPos()[1], 0 , 4, Color.BLACK);
         GameCanvas.gameManager.addGameObject(whiteKing);
         GameCanvas.gameManager.addGameObject(blackKing);
         chessBoard[7][4].setPiece(whiteKing);

@@ -8,8 +8,8 @@ import java.net.*;
 import java.net.InetAddress;
 
 public class ChessGame extends JPanel {
-    static int Game_Width = 800;
-    static int Game_Height = 800;
+    static int Game_Width = 930;
+    static int Game_Height = 830;
     public static Socket socket;
     public static BufferedReader fromServer;
     public static PrintWriter toServer;

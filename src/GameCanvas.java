@@ -8,7 +8,7 @@ public class GameCanvas extends JPanel implements Runnable {
     public static GameManager gameManager = new GameManager();
 
     public GameCanvas() {
-        this.setPreferredSize(new Dimension(800, 800));
+        this.setPreferredSize(new Dimension(930, 830));
         setDoubleBuffered(true);
     }
 
@@ -68,7 +68,7 @@ public class GameCanvas extends JPanel implements Runnable {
         int yCenter = getHeight() / 2;
 
         // Rotate the canvas 180 degrees around the center point
-        g2d.rotate(Math.toRadians(180), xCenter, yCenter);
+        g2d.rotate(Math.toRadians(180), 421, 400);
 
         // Render game (after rotation)
         gameManager.render(g2d);

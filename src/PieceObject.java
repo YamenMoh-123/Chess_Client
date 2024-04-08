@@ -525,7 +525,7 @@ public class PieceObject {
                     int centerX = ChessBoard.chessBoard[7 - (move.charAt(2) - 49)][(move.charAt(0) - 97)].getX() ;
                     int centerY = ChessBoard.chessBoard[7 - (move.charAt(2) - 49)][(move.charAt(0) - 97)].getY() ;
                     g2d.setColor(new Color(129, 150, 105));
-                    g2d.fillOval(centerX + 35, centerY + 35, 30, 30);
+                    g2d.fillOval(centerX + 45, centerY + 35, 30, 30);
                 }
             }
         }
