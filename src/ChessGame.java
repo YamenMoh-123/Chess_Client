@@ -72,7 +72,7 @@ public class ChessGame extends JPanel {
             LaunchScreen homeScreen = new LaunchScreen(frame);
             frame.setContentPane(homeScreen);
 
-            handleServerNotifications(); // Add this line to start listening for server notifications
+            handleServerNotifications();
 
             frame.pack();
             frame.setSize(Game_Width, Game_Height);

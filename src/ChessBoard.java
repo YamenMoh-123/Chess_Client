@@ -134,14 +134,10 @@ public class ChessBoard extends JPanel {
     }
 
     private ChessSquare getFlippedSquare(ChessSquare clickedSquare) {
-        System.out.println(clickedSquare.getName() + " name");
-
         // Extract row and column from the name
         // Extract row and column from the name
         int column = clickedSquare.getName().charAt(0) - 97;
         int row = 8 - (clickedSquare.getName().charAt(2) - 48);
-
-        System.out.println(column + " " + row);
 
         return chessBoard[7-row][7-column];
     }
@@ -428,10 +424,8 @@ public class ChessBoard extends JPanel {
         for (int row = 0; row < COLS; row++) {
             for (int col = 0; col < ROWS; col++) {
                 if (!boardInit[row][col].equals("Empty")) {
-
                     Color color = (row > 3) ? Color.WHITE : Color.BLACK;
                     int[] pos = chessBoard[row][col].getPos();
-                    System.out.println(pos[0] + " " + pos[1]);
                     PieceObject piece = new PieceObject(boardInit[row][col], color, pos[0] ,  pos[1] -  (row*2), false);
                     chessBoard[row][col].setPiece(piece);
                     GameCanvas.gameManager.addGameObject(piece);
