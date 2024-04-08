@@ -46,10 +46,10 @@ public class KingObject extends PieceObject {
                 boardX = 7-yMoves[i];
                 boardY = xMoves[i];
 
-               // System.out.println("TEMP: " + boardX + " " + boardY);
-               // ChessBoard.chessBoard[boardX][boardY].setBackground(Color.YELLOW);
-                if(!isKingChecked() && ChessBoard.chessBoard[boardX][boardY].getPiece() == null){
-                    validMoves.add((char) (xMoves[i] + 97) + " " + (yMoves[i] + 1));
+                if(!isKingChecked()) {
+                    if (ChessBoard.chessBoard[boardX][boardY].getPiece() == null || ChessBoard.chessBoard[boardX][boardY].getPiece().color != this.color) {
+                        validMoves.add((char) (xMoves[i] + 97) + " " + (yMoves[i] + 1));
+                    }
                 }
                 if(!hasMoved && ChessBoard.chessBoard[0][0].getPiece().name.equals("Rook") && !ChessBoard.chessBoard[0][0].getPiece().hasMoved){
                     if(ChessBoard.chessBoard[0][1].getPiece() == null && ChessBoard.chessBoard[0][2].getPiece() == null && ChessBoard.chessBoard[0][3].getPiece() == null){
