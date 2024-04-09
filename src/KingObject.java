@@ -1,14 +1,8 @@
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class KingObject extends PieceObject {
     private int boardX, boardY;
-    private static String[] colNames = {"a", "b", "c", "d", "e", "f", "g", "h"};
-
-    static BufferedImage[] PieceSprite = Resources.pieceSheet.getImagesFrom(0, 0);
-    static BufferedImage[] PieceSpriteBlack = Resources.pieceSheet.getImagesFrom(6, 6);
-
     public KingObject(int x, int y, int boardX, int boardY, Color color) {
         super("King", color, x, y, false);
         this.boardX = boardX;
@@ -34,6 +28,8 @@ public class KingObject extends PieceObject {
         ArrayList<String> validMoves = new ArrayList<String>();
         int x = startingPos.charAt(0) - 97;
         int y = startingPos.charAt(2) - 49;
+
+        // Possible moves for king
         int[] xMoves = {x + 1, x + 1, x - 1, x - 1, x + 1, x - 1, x, x};
         int[] yMoves = {y + 1, y - 1, y + 1, y - 1, y, y, y + 1, y - 1};
         int tempX = boardX;
@@ -46,6 +42,7 @@ public class KingObject extends PieceObject {
                 boardX = 7 - yMoves[i];
                 boardY = xMoves[i];
 
+                // Check if the king is not in check after moving
                 if (!isKingChecked()) {
                     if (ChessBoard.chessBoard[boardX][boardY].getPiece() == null || ChessBoard.chessBoard[boardX][boardY].getPiece().color != this.color) {
                         validMoves.add((char) (xMoves[i] + 97) + " " + (yMoves[i] + 1));
@@ -57,6 +54,8 @@ public class KingObject extends PieceObject {
         boardX = tempX;
         boardY = tempY;
         ChessBoard.chessBoard[boardX][boardY].setPiece(temp);
+
+        // add castling moves
         validMoves.addAll(getMoves());
         return validMoves;
     }
@@ -113,6 +112,8 @@ public class KingObject extends PieceObject {
     @Override
     public boolean hasAvailableMoves() {
 
+
+        // loops through the board and returns true if this color has a valid move
         for(int row =0; row <8; row ++){
             for(int col=0; col<8; col++){
                 ChessSquare currSquare = ChessBoard.chessBoard[row][col];
@@ -132,164 +133,107 @@ public class KingObject extends PieceObject {
 
     @Override
     public boolean isKingChecked() {
+        if (checkLines()) return true;
 
+        // Diagonal checks for Bishop or Queen
 
-        // checks pieces to the bottom of the king until a piece is encountered, if its a rook or queen, return true if its the opposite color
-        for (int i = 1; i < 8; i++) {
-            if (boardX + i < 8 && ChessBoard.chessBoard[boardX + i][boardY].getPiece() != null) {
-                if (ChessBoard.chessBoard[boardX + i][boardY].getPiece().color != this.color) {
-                    if (ChessBoard.chessBoard[boardX + i][boardY].getPiece().name.equals("Rook") || ChessBoard.chessBoard[boardX + i][boardY].getPiece().name.equals("Queen")) {
-                        return true;
-                    }
-                    break;
-                } else {
-                    break;
-                }
-            }
-        }
-        // checks pieces to the top of the king until a piece is encountered, if its a rook or queen, return true if its the opposite color
-        for (int i = 1; i < 8; i++) {
-            if (boardX - i >= 0 && ChessBoard.chessBoard[boardX - i][boardY].getPiece() != null) {
-                if (ChessBoard.chessBoard[boardX - i][boardY].getPiece().color != this.color) {
-                    if (ChessBoard.chessBoard[boardX - i][boardY].getPiece().name.equals("Rook") || ChessBoard.chessBoard[boardX - i][boardY].getPiece().name.equals("Queen")) {
-                        return true;
-                    }
-                    break;
-                } else {
-                    break;
-                }
-            }
-        }
-        // checks pieces to the right of the king until a piece is encountered, if its a rook or queen, return true if its the opposite color
-        for (int i = 1; i < 8; i++) {
-            if (boardY + i < 8 && ChessBoard.chessBoard[boardX][boardY + i].getPiece() != null) {
-                if (ChessBoard.chessBoard[boardX][boardY + i].getPiece().color != this.color) {
-                    if (ChessBoard.chessBoard[boardX][boardY + i].getPiece().name.equals("Rook") || ChessBoard.chessBoard[boardX][boardY + i].getPiece().name.equals("Queen")) {
-                        return true;
-                    }
-                    break;
-                } else {
-                    break;
-                }
-            }
-        }
-        // checks pieces to the left of the king until a piece is encountered, if its a rook or queen, return true if its the opposite color
-        for (int i = 1; i < 8; i++) {
-            if (boardY - i >= 0 && ChessBoard.chessBoard[boardX][boardY - i].getPiece() != null) {
-                if (ChessBoard.chessBoard[boardX][boardY - i].getPiece().color != this.color) {
-                    if (ChessBoard.chessBoard[boardX][boardY - i].getPiece().name.equals("Rook") || ChessBoard.chessBoard[boardX][boardY - i].getPiece().name.equals("Queen")) {
-                        return true;
-                    }
-                    break;
-                } else {
-                    break;
-                }
-            }
-        }
+        if (checkDiagonals()) return true;
 
+        // Knight checks
+        if (checkKnights()) return true;
 
-        // DIAGONAL --------------------------------
-        // checks pieces to the bottom right of the king until a piece is encountered, if its a bishop or queen, return true if its the opposite color
-        for (int i = 1; i < 8; i++) {
-            if (boardX + i < 8 && boardY + i < 8 && ChessBoard.chessBoard[boardX + i][boardY + i].getPiece() != null) {
-                if (ChessBoard.chessBoard[boardX + i][boardY + i].getPiece().color != this.color) {
-                    if (ChessBoard.chessBoard[boardX + i][boardY + i].getPiece().name.equals("Bishop") || ChessBoard.chessBoard[boardX + i][boardY + i].getPiece().name.equals("Queen")) {
-                        return true;
-                    }
-                    break;
-                } else {
-                    break;
-                }
-            }
-        }
+        // Pawn checks
+        if (checkPawns()) return true;
 
-        // checks pieces to the bottom left of the king until a piece is encountered, if its a bishop or queen, return true if its the opposite color
-        for (int i = 1; i < 8; i++) {
-            if (boardX + i < 8 && boardY - i >= 0 && ChessBoard.chessBoard[boardX + i][boardY - i].getPiece() != null) {
-                if (ChessBoard.chessBoard[boardX + i][boardY - i].getPiece().color != this.color) {
-                    if (ChessBoard.chessBoard[boardX + i][boardY - i].getPiece().name.equals("Bishop") || ChessBoard.chessBoard[boardX + i][boardY - i].getPiece().name.equals("Queen")) {
-                        return true;
-                    }
-                    break;
-                } else {
-                    break;
-                }
-            }
-        }
-
-        // checks pieces to the top right of the king until a piece is encountered, if its a bishop or queen, return true if its the opposite color
-        for (int i = 1; i < 8; i++) {
-            if (boardX - i >= 0 && boardY + i < 8 && ChessBoard.chessBoard[boardX - i][boardY + i].getPiece() != null) {
-                if (ChessBoard.chessBoard[boardX - i][boardY + i].getPiece().color != this.color) {
-                    if (ChessBoard.chessBoard[boardX - i][boardY + i].getPiece().name.equals("Bishop") || ChessBoard.chessBoard[boardX - i][boardY + i].getPiece().name.equals("Queen")) {
-                        return true;
-                    }
-                    break;
-                } else {
-                    break;
-                }
-            }
-        }
-
-        // checks pieces to the top left of the king until a piece is encountered, if its a bishop or queen, return true if its the opposite color
-        for (int i = 1; i < 8; i++) {
-            if (boardX - i >= 0 && boardY - i >= 0 && ChessBoard.chessBoard[boardX - i][boardY - i].getPiece() != null) {
-                if (ChessBoard.chessBoard[boardX - i][boardY - i].getPiece().color != this.color) {
-                    if (ChessBoard.chessBoard[boardX - i][boardY - i].getPiece().name.equals("Bishop") || ChessBoard.chessBoard[boardX - i][boardY - i].getPiece().name.equals("Queen")) {
-                        return true;
-                    }
-                    break;
-                } else {
-                    break;
-                }
-            }
-        }
-
-
-        // checks if there is a knight in any of the 8 possible positions
-        int[] xKnight = {2, 1, -1, -2, -2, -1, 1, 2};
-        int[] yKnight = {1, 2, 2, 1, -1, -2, -2, -1};
-        for (int i = 0; i < 8; i++) {
-            if (boardX + xKnight[i] >= 0 && boardX + xKnight[i] < 8 && boardY + yKnight[i] >= 0 && boardY + yKnight[i] < 8) {
-                if (ChessBoard.chessBoard[boardX + xKnight[i]][boardY + yKnight[i]].getPiece() != null) {
-                    if (ChessBoard.chessBoard[boardX + xKnight[i]][boardY + yKnight[i]].getPiece().name.equals("Knight") && ChessBoard.chessBoard[boardX + xKnight[i]][boardY + yKnight[i]].getPiece().color != this.color) {
-
-                        return true;
-                    }
-                }
-            }
-        }
-
-
-        if (boardX + 1 < 8 && boardY - 1 >= 0) { // Southwest
-            if (ChessBoard.chessBoard[boardX + 1][boardY - 1].getPiece() != null &&
-                    ChessBoard.chessBoard[boardX + 1][boardY - 1].getPiece().name.equals("Pawn") &&
-                    ChessBoard.chessBoard[boardX + 1][boardY - 1].getPiece().color == Color.WHITE) {
-                return true;
-            }
-        }
-        if (boardX + 1 < 8 && boardY + 1 < 8) { // Southeast
-            if (ChessBoard.chessBoard[boardX + 1][boardY + 1].getPiece() != null &&
-                    ChessBoard.chessBoard[boardX + 1][boardY + 1].getPiece().name.equals("Pawn") &&
-                    ChessBoard.chessBoard[boardX + 1][boardY + 1].getPiece().color == Color.WHITE) {
-                return true;
-            }
-        }
-
-
-        int[] xKing = {1, 1, 1, 0, 0, -1, -1, -1};
-        int[] yKing = {1, 0, -1, 1, -1, 1, 0, -1};
-        for (int i = 0; i < 8; i++) {
-            if (boardX + xKing[i] >= 0 && boardX + xKing[i] < 8 && boardY + yKing[i] >= 0 && boardY + yKing[i] < 8) {
-                if (ChessBoard.chessBoard[boardX + xKing[i]][boardY + yKing[i]].getPiece() != null) {
-                    if (ChessBoard.chessBoard[boardX + xKing[i]][boardY + yKing[i]].getPiece().name.equals("King") && ChessBoard.chessBoard[boardX + xKing[i]][boardY + yKing[i]].getPiece().color != this.color) {
-                        return true;
-                    }
-                }
-            }
-        }
+        // King checks
+        if (checkKing()) return true;
 
         return false;
     }
+
+    private boolean checkLines() {
+        int[][] directions = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+        for (int[] dir : directions) {
+            for (int i = 1; i < 8; i++) {
+                int dx = boardX + i * dir[0];
+                int dy = boardY + i * dir[1];
+                if (dx >= 0 && dx < 8 && dy >= 0 && dy < 8 && ChessBoard.chessBoard[dx][dy].getPiece() != null) {
+                    if (ChessBoard.chessBoard[dx][dy].getPiece().color != this.color) {
+                        if ("Rook".equals(ChessBoard.chessBoard[dx][dy].getPiece().name) || "Queen".equals(ChessBoard.chessBoard[dx][dy].getPiece().name)) {
+                            return true;
+                        }
+                        break;
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean checkDiagonals() {
+        int[][] directions = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+        for (int[] dir : directions) {
+            for (int i = 1; i < 8; i++) {
+                int dx = boardX + i * dir[0];
+                int dy = boardY + i * dir[1];
+                if (dx >= 0 && dx < 8 && dy >= 0 && dy < 8 && ChessBoard.chessBoard[dx][dy].getPiece() != null) {
+                    if (ChessBoard.chessBoard[dx][dy].getPiece().color != this.color) {
+                        if ("Bishop".equals(ChessBoard.chessBoard[dx][dy].getPiece().name) || "Queen".equals(ChessBoard.chessBoard[dx][dy].getPiece().name)) {
+                            return true;
+                        }
+                        break;
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean checkKnights() {
+        int[] xKnight = {2, 1, -1, -2, -2, -1, 1, 2};
+        int[] yKnight = {1, 2, 2, 1, -1, -2, -2, -1};
+        for (int i = 0; i < 8; i++) {
+            int dx = boardX + xKnight[i];
+            int dy = boardY + yKnight[i];
+            if (dx >= 0 && dx < 8 && dy >= 0 && dy < 8 && ChessBoard.chessBoard[dx][dy].getPiece() != null) {
+                if ("Knight".equals(ChessBoard.chessBoard[dx][dy].getPiece().name) && ChessBoard.chessBoard[dx][dy].getPiece().color != this.color) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean checkPawns() {
+        if (boardX + 1 < 8 && boardY - 1 >= 0 && checkPawn(boardX + 1, boardY - 1)) return true;
+        if (boardX + 1 < 8 && boardY + 1 < 8 && checkPawn(boardX + 1, boardY + 1)) return true;
+        return false;
+    }
+
+    private boolean checkPawn(int x, int y) {
+        return ChessBoard.chessBoard[x][y].getPiece() != null && "Pawn".equals(ChessBoard.chessBoard[x][y].getPiece().name) && ChessBoard.chessBoard[x][y].getPiece().color == Color.WHITE;
+    }
+
+    private boolean checkKing() {
+        int[] xKing = {1, 1, 1, 0, 0, -1, -1, -1};
+        int[] yKing = {1, 0, -1, 1, -1, 1, 0, -1};
+        for (int i = 0; i < 8; i++) {
+            int dx = boardX + xKing[i];
+            int dy = boardY + yKing[i];
+            if (dx >= 0 && dx < 8 && dy >= 0 && dy < 8 && ChessBoard.chessBoard[dx][dy].getPiece() != null) {
+                if ("King".equals(ChessBoard.chessBoard[dx][dy].getPiece().name) && ChessBoard.chessBoard[dx][dy].getPiece().color != this.color) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+
 
 }
